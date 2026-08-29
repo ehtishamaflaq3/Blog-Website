@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const userSchema = new mongoose.connect(
+const userSchema = new mongoose.Schema(
   {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
@@ -12,8 +12,7 @@ const userSchema = new mongoose.connect(
     linkedin: { type: String, default: "" },
     github: { type: String, default: "" },
     facebook: { type: String, default: "" },
-  },
-  {timestamps: true},
+  }
 );
 
 const userCollection = mongoose.model("user", userSchema);

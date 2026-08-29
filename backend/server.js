@@ -1,9 +1,17 @@
 import app from "../../Blog-Website/backend/src/app.js";
 import 'dotenv/config'
 import connectDb from "../../Blog-Website/backend/src/db/db.js";
+import express from 'express'
+import userRouter from "./src/routes/user.route.js";
 
 
+// middlewares
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
 
+
+// for user resgisteration
+app.use("/api/v1/user",userRouter);
 
 // databse cnnection
 await connectDb();
