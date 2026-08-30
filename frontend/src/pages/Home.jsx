@@ -1,8 +1,11 @@
 import React from 'react'
+import Herosection from '../components/Herosection'
 
 const Home = () => {
   return (
-    <div>Home</div>
+    <div className='h-150 w-full'>
+      <Herosection/>
+    </div>
   )
 }
 
