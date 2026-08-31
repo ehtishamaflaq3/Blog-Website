@@ -4,28 +4,57 @@ import Blogs from "./pages/Blogs";
 import About from "./pages/About";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Navbar from './components/Navbar'
+import Navbar from "./components/Navbar";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <><Navbar/><Home /></> ,
+    element: (
+      <>
+        <Navbar />
+        <Home />
+      </>
+    ),
   },
   {
     path: "/blogs",
-    element: <><Navbar/><Blogs /></>,
+    element: (
+      <>
+        <Navbar />
+        <Blogs />
+      </>
+    ),
   },
   {
     path: "/about",
-    element: <><Navbar/><About /></>,
+    element: (
+      <>
+        <Navbar />
+        <About />
+      </>
+    ),
   },
   {
     path: "/login",
-    element: <><Navbar/><Login /></>,
+    element: (
+      <div className="min-h-screen lg:h-screen lg:overflow-hidden">
+        <Navbar />
+        <div className="lg:h-[calc(100vh-4.25rem)] lg:overflow-hidden">
+          <Login />
+        </div>
+      </div>
+    ),
   },
   {
     path: "/signup",
-    element: <><Navbar/><Signup /></>,
+    element: (
+      <div className="min-h-screen lg:h-screen lg:overflow-hidden">
+        <Navbar />
+        <div className="lg:h-[calc(100vh-4.25rem)] lg:overflow-hidden">
+          <Signup />
+        </div>
+      </div>
+    ),
   },
 ]);
 

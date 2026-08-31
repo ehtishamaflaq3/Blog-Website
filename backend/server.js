@@ -3,11 +3,15 @@ import 'dotenv/config'
 import connectDb from "../../Blog-Website/backend/src/db/db.js";
 import express from 'express'
 import userRouter from "./src/routes/user.route.js";
-
+import cors from 'cors'
 
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use(cors({
+    origin:"http://localhost:3000",
+    credentials:true
+}))
 
 
 // for user resgisteration
