@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import authimg from '../assets/auth.jpg'
+import axios from 'axios'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 const Signup = () => {
+  const navigate=useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const [user,setuser]=useState({
     firstName:"",
@@ -20,6 +22,21 @@ const Signup = () => {
   const handleSubmit= async(e)=>{
     e.preventDefault();
     console.log(user);
+    try {
+      const req= await axios.post("http://localhost:3000/api/v1/user/signup",user,{
+        headers:{
+          "Content-type":"application/json"
+        },withCredentials:true})
+        console.log("response",req.data);
+        if (req.data.success) {
+          navigate('/login');
+        }
+    } catch (error) {
+       console.log("STATUS:", error.response?.status);
+  console.log("DATA:", error.response?.data);
+  console.log("MESSAGE:", error.response?.data?.message);
+      console.log(error);
+    }
   };
   return (
     <div className='h-full w-full flex flex-col lg:flex-row lg:overflow-hidden'>

@@ -3,6 +3,26 @@ import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
 import 'dotenv/config'
 
+// export const register = async (req, res) => {
+//   try {
+//     console.log("🔥 REQ BODY:", req.body);
+//     console.log("🔥 CONTENT TYPE:", req.headers["content-type"]);
+
+//     return res.status(200).json({
+//       success: true,
+//       body: req.body,
+//     });
+//   } catch (error) {
+//     console.log("ERROR:", error);
+
+//     return res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+
 export const register = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
@@ -11,7 +31,7 @@ export const register = async (req, res) => {
         success: false,
         message: "All fields are required",
       });
-    }
+    };
     //    email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -19,10 +39,10 @@ export const register = async (req, res) => {
         success: false,
         message: "Invalid email",
       });
-    }
+    };
 
     //    password validation
-    if (password < 6) {
+    if (password.length < 6) {
       return res.status(400).json({
         success: false,
         message: "Password must be atleast 6",
@@ -41,7 +61,7 @@ export const register = async (req, res) => {
     const hashPassword = await bcrypt.hash(password, 5);
 
     // create or register user in database
-    await userCollection.create({
+    const newUser=await userCollection.create({
       firstName,
       lastName,
       email,
@@ -50,14 +70,15 @@ export const register = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: "Account Created Succesfully",
+      newUser:newUser
     });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      success: false,
-      message: "Failed to register",
-    });
-  }
+  console.log("REGISTER ERROR:", error);
+  return res.status(500).json({
+    success: false,
+    message: error.message,
+  });
+}
 };
 
 export const login=async (req,res)=>{
