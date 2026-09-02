@@ -22,7 +22,6 @@ import 'dotenv/config'
 //   }
 // };
 
-
 export const register = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
@@ -93,7 +92,7 @@ export const login=async (req,res)=>{
         }
         // checking ser is exist or not
         let user=await userCollection.findOne({email})
-        if(!email){
+        if(!user){
             return res.status(400).json({
                 success:false,
                 message:"Incorrect email or Password"

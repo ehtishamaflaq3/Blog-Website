@@ -32,9 +32,6 @@ const Signup = () => {
           navigate('/login');
         }
     } catch (error) {
-       console.log("STATUS:", error.response?.status);
-  console.log("DATA:", error.response?.data);
-  console.log("MESSAGE:", error.response?.data?.message);
       console.log(error);
     }
   };
