@@ -1,17 +1,19 @@
 import React from "react";
 import logo from "../assets/logo.png";
 import { IoSearch } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaMoon } from "react-icons/fa";
 const Navbar = () => {
   const user = false;
+  const navigate=useNavigate()
   return (
     <div className="bg-amber-50 border-b-3 border-t-3 border-gray-400 h-17 w-full flex items-center justify-between px-4 md:px-8">
       {/* LOGO */}
       <div className="flex items-center">
         <img
-          className="size-12 md:size-14 cursor-pointer"
+          className="size-12 md:size-15 cursor-pointer"
           src={logo}
+          onClick={()=>navigate("/")}
           alt="Logo"
         />
         <Link to='/'>
@@ -20,7 +22,7 @@ const Navbar = () => {
         </h1>
         </Link>
         {/* SEARCH */}
-        <div className="hidden lg:flex items-center ml-5">
+        <div className="hidden lg:flex items-center ml-6">
           <input
             type="text"
             placeholder="Search..."
@@ -51,12 +53,12 @@ const Navbar = () => {
         {!user && (
           <div className="flex items-center gap-3">
             <Link to="/login">
-              <button className="h-10 px-4 rounded-2xl text-lg font-bold bg-black text-white">
+              <button className="h-10 px-4 rounded-2xl text-lg font-bold bg-black cursor-pointer text-white">
                 Login
               </button>
             </Link>
             <Link to="/signup">
-              <button className="h-10 px-4 rounded-2xl text-lg font-bold bg-black text-white">
+              <button className="h-10 px-4 rounded-2xl text-lg font-bold bg-black cursor-pointer text-white">
                 Signup
               </button>
             </Link>

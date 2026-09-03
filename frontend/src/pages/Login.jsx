@@ -23,7 +23,7 @@ const Login = () => {
     e.preventDefault();
     console.log(loginuser);
     try {
-      const req = await axios.post(
+      const res = await axios.post(
         "http://localhost:3000/api/v1/user/login",
         loginuser,
         {
@@ -33,8 +33,8 @@ const Login = () => {
           withCredentials: true,
         },
       );
-      console.log("response", req.data);
-      if (req.data.success) {
+      console.log("response", res.data);
+      if (res.data.success) {
         navigate("/");
       }
     } catch (error) {

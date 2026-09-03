@@ -39,7 +39,6 @@ export const register = async (req, res) => {
         message: "Invalid email",
       });
     };
-
     //    password validation
     if (password.length < 6) {
       return res.status(400).json({
@@ -47,7 +46,6 @@ export const register = async (req, res) => {
         message: "Password must be atleast 6",
       });
     }
-
     // check user is already or not
     const existingUserbyemail = await userCollection.findOne({ email: email });
     if (existingUserbyemail) {
@@ -58,7 +56,6 @@ export const register = async (req, res) => {
     }
     // hashing pasword
     const hashPassword = await bcrypt.hash(password, 5);
-
     // create or register user in database
     const newUser=await userCollection.create({
       firstName,
