@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/logo.png";
 import { IoSearch } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { FaMoon } from "react-icons/fa";
+import {useSelector} from 'react-redux'
+import store from "../redux/store";
 const Navbar = () => {
-  const user = false;
-  const navigate=useNavigate()
+  const {user} =useSelector(store=>store.auth)
+  const navigate = useNavigate();
   return (
     <div className="bg-amber-50 border-b-3 border-t-3 border-gray-400 h-17 w-full flex items-center justify-between px-4 md:px-8">
       {/* LOGO */}
@@ -13,13 +15,13 @@ const Navbar = () => {
         <img
           className="size-12 md:size-15 cursor-pointer"
           src={logo}
-          onClick={()=>navigate("/")}
+          onClick={() => navigate("/")}
           alt="Logo"
         />
-        <Link to='/'>
-        <h1  className="pl-2 md:pl-4 text-xl md:text-2xl lg:text-3xl font-bold">
-          Logo
-        </h1>
+        <Link to="/">
+          <h1 className="pl-2 md:pl-4 text-xl md:text-2xl lg:text-3xl font-bold">
+            Logo
+          </h1>
         </Link>
         {/* SEARCH */}
         <div className="hidden lg:flex items-center ml-6">
@@ -50,7 +52,26 @@ const Navbar = () => {
           <FaMoon className="size-6" />
         </button>
         {/* AUTH */}
-        {!user && (
+        {user ? (
+          <div className="flex items-center gap-3">
+            {user.profilePic ? (
+              <img
+                src={user.profilePic}
+                alt="Profile"
+                className="w-10 h-10 rounded-full object-cover cursor-pointer"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center font-bold text-lg cursor-pointer">
+                {user.username?.charAt(0).toUpperCase()}{" "}
+              </div>
+            )}
+            <Link to="/">
+              <button className="h-10 px-4 rounded-2xl text-lg font-bold bg-black cursor-pointer text-white">
+                Logout
+              </button>
+            </Link>
+          </div>
+        ) : (
           <div className="flex items-center gap-3">
             <Link to="/login">
               <button className="h-10 px-4 rounded-2xl text-lg font-bold bg-black cursor-pointer text-white">

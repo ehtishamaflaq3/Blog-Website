@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import authimg from "../assets/auth.jpg";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
-
+import {useDispatch} from 'react-redux'
+import { setUser } from "../redux/authSlice.js";
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate =useNavigate();
@@ -11,6 +12,7 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const dispatch = useDispatch();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setloginuser((prev) => ({
@@ -36,6 +38,7 @@ const Login = () => {
       console.log("response", res.data);
       if (res.data.success) {
         navigate("/");
+        dispatch(setUser(res.data.user));
       }
     } catch (error) {
       console.log(error);
