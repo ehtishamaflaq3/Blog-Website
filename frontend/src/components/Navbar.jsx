@@ -1,25 +1,26 @@
-import React, { useState } from "react";
 import logo from "../assets/logo.png";
 import { IoSearch } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
-import { FaMoon } from "react-icons/fa";
-import {useSelector} from 'react-redux'
-import store from "../redux/store";
+import { FaMoon, FaSun } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleTheme } from "../redux/themeSlice";
 const Navbar = () => {
-  const {user} =useSelector(store=>store.auth)
+  const { user } = useSelector((store) => store.auth);
+  const { theme } = useSelector((store) => store.theme);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   return (
-    <div className="bg-amber-50 border-b-3 border-t-3 border-gray-400 h-17 w-full flex items-center justify-between px-4 md:px-8">
+    <div className="bg-amber-50 text-slate-900 border-b-3 border-t-3 border-gray-400 dark:bg-slate-900 dark:text-slate-100 dark:border-slate-700 h-17 w-full flex items-center justify-between px-4 md:px-8 transition-colors">
       {/* LOGO */}
       <div className="flex items-center">
         <img
-          className="size-12 md:size-15 cursor-pointer"
+          className="size-12 md:size-15 cursor-pointer dark:invert"
           src={logo}
           onClick={() => navigate("/")}
           alt="Logo"
         />
         <Link to="/">
-          <h1 className="pl-2 md:pl-4 text-xl md:text-2xl lg:text-3xl font-bold">
+          <h1 className="pl-2 md:pl-4 text-xl md:text-2xl lg:text-3xl font-bold text-slate-900 dark:text-slate-100">
             Logo
           </h1>
         </Link>
@@ -28,7 +29,7 @@ const Navbar = () => {
           <input
             type="text"
             placeholder="Search..."
-            className="border-2 pl-2 h-10 rounded-l-xl text-lg w-60"
+            className="border-2 border-slate-300 bg-white pl-2 h-10 rounded-l-xl text-lg text-slate-900 placeholder:text-slate-500 w-60 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400"
           />
           <IoSearch className="size-11 border-2 bg-black text-white rounded-r-xl " />
         </div>
@@ -38,18 +39,25 @@ const Navbar = () => {
         {/* LINKS */}
         <ul className="flex items-center gap-6">
           <Link to="/">
-            <li className="text-lg xl:text-xl font-bold">Home</li>
+            <li className="text-lg xl:text-xl font-bold text-slate-900 dark:text-slate-100">Home</li>
           </Link>
           <Link to="/blogs">
-            <li className="text-lg xl:text-xl font-bold">Blogs</li>
+            <li className="text-lg xl:text-xl font-bold text-slate-900 dark:text-slate-100">Blogs</li>
           </Link>
           <Link to="/about">
-            <li className="text-lg xl:text-xl font-bold">About</li>
+            <li className="text-lg xl:text-xl font-bold text-slate-900 dark:text-slate-100">About</li>
           </Link>
         </ul>
         {/* MOON */}
-        <button className="bg-black h-10 w-12 rounded-2xl text-white flex items-center justify-center">
-          <FaMoon className="size-6" />
+        <button
+          onClick={() => dispatch(toggleTheme())}
+          className="bg-slate-900 h-10 w-12 rounded-2xl text-white flex items-center justify-center dark:bg-amber-300 cursor-pointer dark:text-slate-900"
+        >
+          {theme === "dark" ? (
+            <FaSun className="size-6" />
+          ) : (
+            <FaMoon className="size-6" />
+          )}
         </button>
         {/* AUTH */}
         {user ? (
