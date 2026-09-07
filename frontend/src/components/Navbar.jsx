@@ -25,11 +25,11 @@ const Navbar = () => {
           </h1>
         </Link>
         {/* SEARCH */}
-        <div className="hidden lg:flex items-center ml-6">
+        <div className="hidden lg:flex items-center ml-18">
           <input
             type="text"
             placeholder="Search..."
-            className="border-2 border-slate-300 bg-white pl-2 h-10 rounded-l-xl text-lg text-slate-900 placeholder:text-slate-500 w-60 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400"
+            className="border-2 border-slate-300 bg-white pl-2 h-11 rounded-l-xl text-lg text-slate-900 placeholder:text-slate-500 w-75 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400"
           />
           <IoSearch className="size-11 border-2 bg-black text-white rounded-r-xl " />
         </div>
@@ -39,13 +39,19 @@ const Navbar = () => {
         {/* LINKS */}
         <ul className="flex items-center gap-6">
           <Link to="/">
-            <li className="text-lg xl:text-xl font-bold text-slate-900 dark:text-slate-100">Home</li>
+            <li className="text-lg xl:text-xl font-bold text-slate-900 dark:text-slate-100">
+              Home
+            </li>
           </Link>
           <Link to="/blogs">
-            <li className="text-lg xl:text-xl font-bold text-slate-900 dark:text-slate-100">Blogs</li>
+            <li className="text-lg xl:text-xl font-bold text-slate-900 dark:text-slate-100">
+              Blogs
+            </li>
           </Link>
           <Link to="/about">
-            <li className="text-lg xl:text-xl font-bold text-slate-900 dark:text-slate-100">About</li>
+            <li className="text-lg xl:text-xl font-bold text-slate-900 dark:text-slate-100">
+              About
+            </li>
           </Link>
         </ul>
         {/* MOON */}
@@ -82,12 +88,12 @@ const Navbar = () => {
         ) : (
           <div className="flex items-center gap-3">
             <Link to="/login">
-              <button className="h-10 px-4 rounded-2xl text-lg font-bold bg-black cursor-pointer text-white">
+              <button className="h-10 px-4 rounded-2xl text-lg font-bold bg-black cursor-pointer text-white border-2 border-gray-400">
                 Login
               </button>
             </Link>
             <Link to="/signup">
-              <button className="h-10 px-4 rounded-2xl text-lg font-bold bg-black cursor-pointer text-white">
+              <button className="h-10 px-4 rounded-2xl text-lg font-bold bg-black cursor-pointer text-white dark:border-2 border-gray-400">
                 Signup
               </button>
             </Link>

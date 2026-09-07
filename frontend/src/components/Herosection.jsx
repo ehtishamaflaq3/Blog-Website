@@ -12,7 +12,7 @@ const Herosection = () => {
       Stay ahead with in-depth articles, tutorials, and insights on web development, digital marketing, and tech innovations
     </p>
     <div className="flex items-center justify-center gap-4 md:gap-8">
-      <button className="bg-black text-white h-12 w-32 md:h-13 md:w-35  cursor-pointer font-bold rounded-2xl">
+      <button className="bg-black text-white h-12 w-32 md:h-13 md:w-35  cursor-pointer font-bold rounded-2xl dark:border-2 border-gray-400">
         Get Started
       </button>
       <button className="text-black border-2 border-gray-400 h-12 w-32 md:h-13 md:w-35 font-bold dark:invert   hover:bg-gray-400 cursor-pointer rounded-2xl">
