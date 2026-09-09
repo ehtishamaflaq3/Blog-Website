@@ -7,13 +7,29 @@ import { FaMoon, FaSun } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../redux/themeSlice";
 import { Button } from "@/components/ui/button";
+import * as React from "react";
+import {
+  LogOutIcon,
+  UserIcon,
+  MessageSquareText,
+  SquarePen,
+  ChartBarBig
+} from "lucide-react";
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -22,6 +38,7 @@ const Navbar = () => {
   const { theme } = useSelector((store) => store.theme);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const logoutHandler = async (e) => {
     try {
       const res = await axios.get("http://localhost:3000/api/v1/user/logout", {
@@ -108,16 +125,43 @@ const Navbar = () => {
                   <DropdownMenuTrigger render={<Button variant="outline" />}>
                     {user.username?.charAt(0).toUpperCase()}{" "}
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent>
+                  <DropdownMenuContent className="w-44">
+                    <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                       <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                      <DropdownMenuItem>Profile</DropdownMenuItem>
-                      <DropdownMenuItem>Billing</DropdownMenuItem>
+                      
+                      <DropdownMenuItem>
+                        <UserIcon />
+                        Profile
+                        <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                      
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <ChartBarBig />
+                        Your Blog
+                        <DropdownMenuShortcut>⇧⌘B</DropdownMenuShortcut>
+                      </DropdownMenuItem>
+                    
+                      <DropdownMenuItem>
+                        <MessageSquareText />
+                        Comments
+                        <DropdownMenuShortcut>⇧⌘B</DropdownMenuShortcut>
+                      </DropdownMenuItem>
+                    
+                      <DropdownMenuItem>
+                        <SquarePen />
+                        Write Blog
+                        <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                      </DropdownMenuItem>
+                    
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                      <DropdownMenuItem>Team</DropdownMenuItem>
-                      <DropdownMenuItem>Subscription</DropdownMenuItem>
+                      <DropdownMenuItem variant="destructive">
+                        <LogOutIcon />
+                        Log Out
+                        <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                      </DropdownMenuItem>
                     </DropdownMenuGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>
