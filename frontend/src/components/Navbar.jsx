@@ -1,14 +1,42 @@
+import { setUser } from "../redux/authSlice";
+import axios from "axios";
 import logo from "../assets/logo.png";
 import { IoSearch } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../redux/themeSlice";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 const Navbar = () => {
   const { user } = useSelector((store) => store.auth);
   const { theme } = useSelector((store) => store.theme);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const logoutHandler = async (e) => {
+    try {
+      const res = await axios.get("http://localhost:3000/api/v1/user/logout", {
+        withCredentials: true,
+      });
+      if (res.data.success) {
+        navigate("/");
+        dispatch(setUser(null));
+        // message for success
+        // toast.success(res.data.message)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="bg-amber-50 text-slate-900 border-b-3 border-t-3 border-gray-400 dark:bg-slate-900 dark:text-slate-100 dark:border-slate-700 h-17 w-full flex items-center justify-between px-4 md:px-8 transition-colors">
       {/* LOGO */}
@@ -29,9 +57,9 @@ const Navbar = () => {
           <input
             type="text"
             placeholder="Search..."
-            className="border-2 border-slate-300 bg-white pl-2 h-11 rounded-l-xl text-lg text-slate-900 placeholder:text-slate-500 w-75 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400"
+            className="border-2 border-slate-300 bg-white pl-2 h-12 rounded-l-xl text-lg text-slate-900 placeholder:text-slate-500 w-85 dark:border-slate-300 dark:bg-slate-700 dark:text-slate-100 dark:placeholder:text-slate-400"
           />
-          <IoSearch className="size-11 border-2 bg-black text-white rounded-r-xl " />
+          <IoSearch className="size-12 border-2 bg-black text-white rounded-r-xl " />
         </div>
       </div>
       {/* DESKTOP CONTENT */}
@@ -76,14 +104,31 @@ const Navbar = () => {
               />
             ) : (
               <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center font-bold text-lg cursor-pointer">
-                {user.username?.charAt(0).toUpperCase()}{" "}
+                <DropdownMenu>
+                  <DropdownMenuTrigger render={<Button variant="outline" />}>
+                    {user.username?.charAt(0).toUpperCase()}{" "}
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuGroup>
+                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                      <DropdownMenuItem>Profile</DropdownMenuItem>
+                      <DropdownMenuItem>Billing</DropdownMenuItem>
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem>Team</DropdownMenuItem>
+                      <DropdownMenuItem>Subscription</DropdownMenuItem>
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             )}
-            <Link to="/">
-              <button className="h-10 px-4 rounded-2xl text-lg font-bold bg-black cursor-pointer text-white">
-                Logout
-              </button>
-            </Link>
+            <button
+              onClick={logoutHandler}
+              className="h-10 px-4 rounded-2xl text-lg font-bold bg-black cursor-pointer text-white border-2 border-gray-400"
+            >
+              Logout
+            </button>
           </div>
         ) : (
           <div className="flex items-center gap-3">
