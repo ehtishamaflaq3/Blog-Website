@@ -8,12 +8,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../redux/themeSlice";
 import { Button } from "@/components/ui/button";
 import * as React from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   LogOutIcon,
   UserIcon,
   MessageSquareText,
   SquarePen,
-  ChartBarBig
+  ChartBarBig,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -111,49 +112,49 @@ const Navbar = () => {
           )}
         </button>
         {/* AUTH */}
-        {user ? (
+        {user ? 
+        // user login ho ga to
+        (
           <div className="flex items-center gap-3">
-            {user.profilePic ? (
-              <img
-                src={user.profilePic}
-                alt="Profile"
-                className="w-10 h-10 rounded-full object-cover cursor-pointer"
-              />
-            ) : (
-              <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center font-bold text-lg cursor-pointer">
+              <div className="w-10 h-10 rounded-full  bg-black text-white flex items-center justify-center font-bold text-lg cursor-pointer">
                 <DropdownMenu>
                   <DropdownMenuTrigger render={<Button variant="outline" />}>
-                    {user.username?.charAt(0).toUpperCase()}{" "}
+                    <Avatar>
+                  <AvatarImage
+                    src="https://github.com/shadcn.png"
+                    alt="@shadcn"
+                    className="grayscale"
+                  />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-44">
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                       <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                      
+
                       <DropdownMenuItem>
                         <UserIcon />
                         Profile
                         <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                      
                       </DropdownMenuItem>
                       <DropdownMenuItem>
                         <ChartBarBig />
                         Your Blog
                         <DropdownMenuShortcut>⇧⌘B</DropdownMenuShortcut>
                       </DropdownMenuItem>
-                    
+
                       <DropdownMenuItem>
                         <MessageSquareText />
                         Comments
                         <DropdownMenuShortcut>⇧⌘B</DropdownMenuShortcut>
                       </DropdownMenuItem>
-                    
+
                       <DropdownMenuItem>
                         <SquarePen />
                         Write Blog
                         <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
                       </DropdownMenuItem>
-                    
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
@@ -166,7 +167,6 @@ const Navbar = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-            )}
             <button
               onClick={logoutHandler}
               className="h-10 px-4 rounded-2xl text-lg font-bold bg-black cursor-pointer text-white border-2 border-gray-400"
@@ -174,7 +174,9 @@ const Navbar = () => {
               Logout
             </button>
           </div>
-        ) : (
+        ) : 
+        // user login nahi ha tu
+        (
           <div className="flex items-center gap-3">
             <Link to="/login">
               <button className="h-10 px-4 rounded-2xl text-lg font-bold bg-black cursor-pointer text-white border-2 border-gray-400">
