@@ -5,6 +5,9 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import {useDispatch} from 'react-redux'
 import { setUser } from "../redux/authSlice.js";
+import { toast } from "@/components/ui/toast"
+
+
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate =useNavigate();
@@ -20,7 +23,15 @@ const Login = () => {
       [name]: value,
     }));
   };
-
+  // toast function
+  function showToast() {
+  toast.add({
+    title: "Login Successful",
+    description: "Welcome back!",
+    type: "success",
+  });
+}
+  // form submission logic
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(loginuser);
@@ -37,13 +48,20 @@ const Login = () => {
       );
       console.log("response", res.data);
       if (res.data.success) {
+        showToast();
         navigate("/");
         dispatch(setUser(res.data.user));
       }
     } catch (error) {
       console.log(error);
+      toast.add({
+    title: "Login Failed",
+    description: error.response?.data?.message || "Something went wrong.",
+    type: "error",
+  });
     }
   };
+    
   return (
     <div className="h-full w-full flex flex-col lg:flex-row lg:overflow-hidden">
       {/* image section */}

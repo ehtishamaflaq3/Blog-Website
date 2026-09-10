@@ -4,7 +4,7 @@ import Outlet from '../components/Outlet'
 
 const Dashboard = () => {
   return (
-    <div className='flex'>
+    <div className='border-2 border-gray-400 h-156 w-full'>
       <Sidebar/>
       <div className='flex'>
         <Outlet/>

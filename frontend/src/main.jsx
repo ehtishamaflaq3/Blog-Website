@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/toast"
 import { StrictMode } from "react";
 import { Provider } from "react-redux";
 import { createRoot } from "react-dom/client";
@@ -11,6 +12,7 @@ createRoot(document.getElementById("root")).render(
     <Provider store={store}>
       <ThemeProvider>
         <App />
+        <Toaster />
       </ThemeProvider>
     </Provider>
   </StrictMode>,

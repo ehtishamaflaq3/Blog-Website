@@ -33,6 +33,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toast } from "../components/ui/toast";
 
 const Navbar = () => {
   const { user } = useSelector((store) => store.auth);
@@ -40,21 +41,32 @@ const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const logoutHandler = async (e) => {
+  // logout handler
+  const logoutHandler = async () => {
     try {
       const res = await axios.get("http://localhost:3000/api/v1/user/logout", {
         withCredentials: true,
       });
+
       if (res.data.success) {
         navigate("/");
         dispatch(setUser(null));
-        // message for success
-        // toast.success(res.data.message)
+        toast.add({
+          title: "Logged Out",
+          description: "You have been logged out successfully.",
+          type: "success",
+        });
       }
     } catch (error) {
       console.log(error);
+      toast.add({
+        title: "Logout Failed",
+        description: error.response?.data?.message || "Something went wrong.",
+        type: "error",
+      });
     }
   };
+
   return (
     <div className="bg-amber-50 text-slate-900 border-b-3 border-t-3 border-gray-400 dark:bg-slate-900 dark:text-slate-100 dark:border-slate-700 h-17 w-full flex items-center justify-between px-4 md:px-8 transition-colors">
       {/* LOGO */}
@@ -71,13 +83,13 @@ const Navbar = () => {
           </h1>
         </Link>
         {/* SEARCH */}
-        <div className="hidden lg:flex items-center ml-18">
+        <div className="hidden lg:flex items-center ml-18 gap-1">
           <input
             type="text"
             placeholder="Search..."
             className="border-2 border-slate-300 bg-white pl-2 h-12 rounded-l-xl text-lg text-slate-900 placeholder:text-slate-500 w-85 dark:border-slate-300 dark:bg-slate-700 dark:text-slate-100 dark:placeholder:text-slate-400"
           />
-          <IoSearch className="size-12 border-2 bg-black text-white rounded-r-xl " />
+          <IoSearch className="size-12 border-2 bg-black text-white rounded-r-xl dark:border-2 border-slate-300" />
         </div>
       </div>
       {/* DESKTOP CONTENT */}
@@ -112,61 +124,61 @@ const Navbar = () => {
           )}
         </button>
         {/* AUTH */}
-        {user ? 
-        // user login ho ga to
-        (
-          <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full  bg-black text-white flex items-center justify-center font-bold text-lg cursor-pointer">
-                <DropdownMenu>
-                  <DropdownMenuTrigger render={<Button variant="outline" />}>
-                    <Avatar>
-                  <AvatarImage
-                    src="https://github.com/shadcn.png"
-                    alt="@shadcn"
-                    className="grayscale"
-                  />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-44">
-                    <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        {user ? (
+          // user login ho ga to
+          <div className="flex cursor-pointer items-center gap-3">
+            <div className="w-11 h-11 rounded-full  bg-black text-white flex items-center justify-center font-bold text-lg cursor-pointer">
+              <DropdownMenu>
+                <DropdownMenuTrigger render={<Button variant="outline" />}>
+                  <Avatar>
+                    <AvatarImage
+                      src="https://github.com/shadcn.png"
+                      alt="@shadcn"
+                      className="grayscale cursor-pointer"
+                    />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="cursor-pointer w-44">
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <Link to={'/dashboard'}>
+                    <DropdownMenuItem >
+                      <UserIcon />
+                      Profile
+                      <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                    </Link>
+                    <DropdownMenuItem>
+                      <ChartBarBig />
+                      Your Blog
+                      <DropdownMenuShortcut>⇧⌘B</DropdownMenuShortcut>
+                    </DropdownMenuItem>
 
-                      <DropdownMenuItem>
-                        <UserIcon />
-                        Profile
-                        <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <ChartBarBig />
-                        Your Blog
-                        <DropdownMenuShortcut>⇧⌘B</DropdownMenuShortcut>
-                      </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <MessageSquareText />
+                      Comments
+                      <DropdownMenuShortcut>⇧⌘B</DropdownMenuShortcut>
+                    </DropdownMenuItem>
 
-                      <DropdownMenuItem>
-                        <MessageSquareText />
-                        Comments
-                        <DropdownMenuShortcut>⇧⌘B</DropdownMenuShortcut>
-                      </DropdownMenuItem>
-
-                      <DropdownMenuItem>
-                        <SquarePen />
-                        Write Blog
-                        <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                      </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                      <DropdownMenuItem variant="destructive">
-                        <LogOutIcon />
-                        Log Out
-                        <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                      </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
+                    <DropdownMenuItem>
+                      <SquarePen />
+                      Write Blog
+                      <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem variant="destructive">
+                      <LogOutIcon />
+                      Log Out
+                      <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             <button
               onClick={logoutHandler}
               className="h-10 px-4 rounded-2xl text-lg font-bold bg-black cursor-pointer text-white border-2 border-gray-400"
@@ -174,9 +186,8 @@ const Navbar = () => {
               Logout
             </button>
           </div>
-        ) : 
-        // user login nahi ha tu
-        (
+        ) : (
+          // user login nahi ha tu
           <div className="flex items-center gap-3">
             <Link to="/login">
               <button className="h-10 px-4 rounded-2xl text-lg font-bold bg-black cursor-pointer text-white border-2 border-gray-400">

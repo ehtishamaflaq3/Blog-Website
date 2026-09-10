@@ -5,6 +5,7 @@ import About from "./pages/About";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Navbar from "./components/Navbar";
+import Profile from './pages/Profile'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 const router = createBrowserRouter([
@@ -43,6 +44,12 @@ const router = createBrowserRouter([
         <Dashboard />
       </>
     ),
+    children:[
+      {
+        path:'/profile',
+        element:<Profile/>
+      }
+    ]
   },
   {
     path: "/login",
