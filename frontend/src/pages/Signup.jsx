@@ -7,12 +7,14 @@ import { toast } from "@/components/ui/toast";
 const Signup = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [user, setuser] = useState({
+  const [user, setuser] = useState(
+    {
     firstName: "",
     lastName: "",
     email: "",
     password: "",
-  });
+  }
+);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setuser((prev) => ({
