@@ -143,26 +143,22 @@ const Navbar = () => {
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <Link to={'/dashboard'}>
-                    <DropdownMenuItem >
+                    <DropdownMenuItem onClick={()=>navigate('/dashboard/profile')}>
                       <UserIcon />
                       Profile
                       <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
                     </DropdownMenuItem>
-                    </Link>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={()=>navigate('/dashboard/your-blog')}>
                       <ChartBarBig />
                       Your Blog
                       <DropdownMenuShortcut>⇧⌘B</DropdownMenuShortcut>
                     </DropdownMenuItem>
-
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={()=>navigate('/dashboard/comments')}>
                       <MessageSquareText />
                       Comments
                       <DropdownMenuShortcut>⇧⌘B</DropdownMenuShortcut>
                     </DropdownMenuItem>
-
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={()=>navigate('/dashboard/create-blog')}>
                       <SquarePen />
                       Write Blog
                       <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
