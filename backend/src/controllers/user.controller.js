@@ -22,6 +22,8 @@ import 'dotenv/config'
 //   }
 // };
 
+
+// user registration 
 export const register = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
@@ -77,6 +79,9 @@ export const register = async (req, res) => {
 }
 };
 
+
+// user login
+
 export const login=async (req,res)=>{
     try {
         const {email,password} = req.body;
@@ -119,9 +124,13 @@ export const login=async (req,res)=>{
     }
 };
 
+// user logout
+
 export const logout=async(_,res)=>{
     return res.status(200).cookie("token","",{maxAge:0}).json({
         success:true,
         message:"Logout Successfully"
     })
 };
+
+// 
