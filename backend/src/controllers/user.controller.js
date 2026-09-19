@@ -2,6 +2,8 @@ import userCollection from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from 'jsonwebtoken';
 import 'dotenv/config'
+import cloudinary from "../utils/cloudinary.js";
+import getDataUri from "../utils/datauri.js";
 
 // export const register = async (req, res) => {
 //   try {
@@ -79,7 +81,6 @@ export const register = async (req, res) => {
 }
 };
 
-
 // user login
 
 export const login=async (req,res)=>{
@@ -133,4 +134,50 @@ export const logout=async(_,res)=>{
     })
 };
 
-// 
+// user edit profile
+
+export const updateProfile = async(req,res)=>{
+  try {
+    const userId= req.id;
+    const {firstName,lastName,facebook, instagram , linkedin, github,occupation, bio}=req.body;
+    const file = req.file;
+
+    let cloudResponse;
+    if (file) {
+      const fileUri = getDataUri(file);
+      cloudResponse = await cloudinary.uploader.upload(fileUri);
+    }
+
+    const user = await userCollection.findById(userId).select("-password");
+    if (!user) {
+      return res.status(404).json({
+        message:"User not Found",
+        success:false
+      })
+    }
+    // updating data
+    if(firstName) user.firstName = firstName
+    if(lastName) user.lastName = lastName
+    if(occupation) user.occupation = occupation
+    if(instagram) user.instagram = instagram
+    if(facebook) user.facebook = facebook
+    if(linkedin) user.linkedin = linkedin
+    if(github) user.github = github
+    if(bio) user.bio = bio
+    if(file) user.photoUrl = cloudResponse.secure_url
+
+    await user.save()
+    return res.status(200).json({
+      message:"Profile Updated Successfully",
+      success:true,
+      user
+    })
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({
+      success:false,
+      message:"Failed to update profile"
+    })
+  }
+}
+

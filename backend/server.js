@@ -4,9 +4,11 @@ import connectDb from "../../Blog-Website/backend/src/db/db.js";
 import express from "express";
 import userRouter from "./src/routes/user.route.js";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 // middlewares
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
@@ -17,7 +19,6 @@ app.use(
 
 // for user resgisteration
 app.use("/api/v1/user", userRouter);
-
 
 // databse cnnection
 await connectDb();
