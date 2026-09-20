@@ -1,6 +1,7 @@
 import { setUser } from "../redux/authSlice";
 import axios from "axios";
 import logo from "../assets/logo.png";
+import userlogo from '../assets/user.jpg'
 import { IoSearch } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { FaMoon, FaSun } from "react-icons/fa";
@@ -132,7 +133,7 @@ const Navbar = () => {
                 <DropdownMenuTrigger render={<Button variant="outline" />}>
                   <Avatar>
                     <AvatarImage
-                      src="https://github.com/shadcn.png"
+                      src={user.photoUrl || userlogo}
                       alt="@shadcn"
                       className="grayscale cursor-pointer"
                     />

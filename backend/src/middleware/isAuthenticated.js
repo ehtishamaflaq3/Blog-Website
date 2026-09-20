@@ -1,7 +1,11 @@
 import jwt from 'jsonwebtoken'
 export const isAuthenticated=async(req, res,next)=>{
     try {
-        const token= req.cookies.token;
+        const authorization = req.headers.authorization;
+        const bearerToken = authorization?.startsWith("Bearer ")
+            ? authorization.slice(7)
+            : null;
+        const token = req.cookies?.token || bearerToken;
         if (!token) {
             return res.status(401).json({
                 message: "User not Authenticated",
@@ -18,6 +22,10 @@ export const isAuthenticated=async(req, res,next)=>{
         req.id=decode.userId;
         next()
     } catch (error) {
-        console.log(error);
+        console.error("Authentication error:", error.message);
+        return res.status(401).json({
+            message: "Invalid or expired token",
+            success: false,
+        });
     }
 };
