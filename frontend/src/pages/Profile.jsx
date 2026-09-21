@@ -25,9 +25,10 @@ import store from "@/redux/store";
 import { setLoading, setUser } from "@/redux/authSlice";
 import axios from "axios";
 import { toast } from "@/components/ui/toast";
+import { Loader2 } from "lucide-react";
 
 const Profile = () => {
-  const { user } = useSelector((store) => store.auth);
+  const { user,loading  } = useSelector((store) => store.auth);
   const dispatch =useDispatch()
   const [open,setopen] = useState(false)
   const [input, setInput] = useState({
@@ -145,14 +146,14 @@ const Profile = () => {
                     </Button>
                   }
                 />
-                <DialogContent className="sm:max-w-sm border-4 border-gray-400 w-[35%]">
+                <DialogContent className="sm:max-w-sm border-4 border-gray-400 w-[45%]">
                   <DialogHeader className="text-center">
                     <DialogTitle>Edit profile</DialogTitle>
                     <DialogDescription>
                       Make changes to your profile here.
                     </DialogDescription>
                   </DialogHeader>
-                  {/* name */}                  
+                  {/* name */}            
                   <FieldGroup className="flex flex-row">
                     <Field>
                       <Label htmlFor="firstname-1">First Name</Label>
@@ -244,9 +245,16 @@ const Profile = () => {
                   {/* footer form section */}
                   <DialogFooter className="border-4 ">
                     <DialogClose
-                      render={<Button variant="outline">Cancel</Button>}
+                      render={<Button className="bg-black h-12 shadow-2xl text-white rounded-2xl cursor-pointer w-[45%] font-bold text-xl" variant="outline">Cancel</Button>}
                     />
-                    <Button onClick={submitHandler} type="submit">Save changes</Button>
+                    <Button className="bg-black h-12 text-white shadow-2xl rounded-2xl cursor-pointer w-[45%] font-bold text-xl" onClick={submitHandler} type="submit">{
+                      loading ?(
+                        <>
+                        <Loader2 className="mr-2 w-4 h-4 animate-spin"/>
+                        Please wait
+                        </>
+                      ):("Save changes")
+                      }</Button>
                   </DialogFooter>
                 </DialogContent>
               </form>
