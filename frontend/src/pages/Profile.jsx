@@ -52,6 +52,7 @@ const Profile = () => {
       [name]: value,
     }));
   };
+  // for file
   const changeFileHandler = (e) => {
     setInput({
       ...input,

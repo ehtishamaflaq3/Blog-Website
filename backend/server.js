@@ -3,6 +3,7 @@ import "dotenv/config";
 import connectDb from "../../Blog-Website/backend/src/db/db.js";
 import express from "express";
 import userRouter from "./src/routes/user.route.js";
+import blogRouter from "./src/routes/blog.route.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -20,8 +21,12 @@ app.use(
 // for user resgisteration
 app.use("/api/v1/user", userRouter);
 
+// for blog functioning
+app.use("/api/v1/blog", blogRouter);
+
 // databse cnnection
 await connectDb();
+
 // server connection
 app.listen(process.env.Port, () => {
   console.log("Server is runing");

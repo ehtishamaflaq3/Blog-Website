@@ -1,7 +1,7 @@
 import userCollection from "../models/user.model.js";
 import bcrypt from "bcryptjs";
-import jwt from 'jsonwebtoken';
-import 'dotenv/config'
+import jwt from "jsonwebtoken";
+import "dotenv/config";
 import cloudinary from "../utils/cloudinary.js";
 import getDataUri from "../utils/datauri.js";
 
@@ -24,8 +24,7 @@ import getDataUri from "../utils/datauri.js";
 //   }
 // };
 
-
-// user registration 
+// user registration
 export const register = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
@@ -34,7 +33,7 @@ export const register = async (req, res) => {
         success: false,
         message: "All fields are required",
       });
-    };
+    }
     //    email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -42,7 +41,7 @@ export const register = async (req, res) => {
         success: false,
         message: "Invalid email",
       });
-    };
+    }
     //    password validation
     if (password.length < 6) {
       return res.status(400).json({
@@ -61,7 +60,7 @@ export const register = async (req, res) => {
     // hashing pasword
     const hashPassword = await bcrypt.hash(password, 5);
     // create or register user in database
-    const newUser=await userCollection.create({
+    const newUser = await userCollection.create({
       firstName,
       lastName,
       email,
@@ -70,76 +69,94 @@ export const register = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: "Account Created Succesfully",
-      newUser:newUser
+      newUser: newUser,
     });
   } catch (error) {
-  console.log("REGISTER ERROR:", error);
-  return res.status(500).json({
-    success: false,
-    message: error.message,
-  });
-}
+    console.log("REGISTER ERROR:", error);
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 // user login
 
-export const login=async (req,res)=>{
-    try {
-        const {email,password} = req.body;
-        // checking anything is missing
-        if(!email || !password ){
-            return res.status(400).json({
-                success:false,
-                message:"All fields are required"
-            })
-        }
-        // checking ser is exist or not
-        let user=await userCollection.findOne({email})
-        if(!user){
-            return res.status(400).json({
-                success:false,
-                message:"Incorrect email or Password"
-            })
-        }
-        // password validation
-        const isPasswordvalid=await bcrypt.compare(password,user.password);
-        if(!isPasswordvalid){
-            return res.status(400).json({
-                success:false,
-                message:"Invalid Credentials"
-            })
-        }
-        // creating tokens
-        const token=jwt.sign({userId:user._id},process.env.Secret_Key,{expiresIn:"1d"});
-        return res.status(200).cookie("token",token,{maxAge:1*24*60*60*1000,httpOnly:true,sameSite:"strict"}).json({
-            success:true,
-            message:`Wellcome Back ${user.firstName}`,
-            user
-        });
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            success:false,
-            message:"Failed to register"
-        })
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    // checking anything is missing
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required",
+      });
     }
+    // checking ser is exist or not
+    let user = await userCollection.findOne({ email });
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "Incorrect email or Password",
+      });
+    }
+    // password validation
+    const isPasswordvalid = await bcrypt.compare(password, user.password);
+    if (!isPasswordvalid) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Credentials",
+      });
+    }
+    // creating tokens
+    const token = jwt.sign({ userId: user._id }, process.env.Secret_Key, {
+      expiresIn: "1d",
+    });
+    return res
+      .status(200)
+      .cookie("token", token, {
+        maxAge: 1 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        sameSite: "strict",
+      })
+      .json({
+        success: true,
+        message: `Wellcome Back ${user.firstName}`,
+        user,
+      });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to register",
+    });
+  }
 };
 
 // user logout
 
-export const logout=async(_,res)=>{
-    return res.status(200).cookie("token","",{maxAge:0}).json({
-        success:true,
-        message:"Logout Successfully"
-    })
+export const logout = async (_, res) => {
+  return res.status(200).cookie("token", "", { maxAge: 0 }).json({
+    success: true,
+    message: "Logout Successfully",
+  });
 };
 
 // user edit profile
 
-export const updateProfile = async(req,res)=>{
+export const updateProfile = async (req, res) => {
   try {
-    const userId= req.id;
-    const {firstName,lastName,facebook, instagram , linkedin, github,occupation, bio}=req.body;
+    const userId = req.id;
+    const {
+      firstName,
+      lastName,
+      facebook,
+      instagram,
+      linkedin,
+      github,
+      occupation,
+      bio,
+    } = req.body;
     const file = req.file;
 
     let cloudResponse;
@@ -151,33 +168,32 @@ export const updateProfile = async(req,res)=>{
     const user = await userCollection.findById(userId).select("-password");
     if (!user) {
       return res.status(404).json({
-        message:"User not Found",
-        success:false
-      })
+        message: "User not Found",
+        success: false,
+      });
     }
     // updating data
-    if(firstName) user.firstName = firstName
-    if(lastName) user.lastName = lastName
-    if(occupation) user.occupation = occupation
-    if(instagram) user.instagram = instagram
-    if(facebook) user.facebook = facebook
-    if(linkedin) user.linkedin = linkedin
-    if(github) user.github = github
-    if(bio) user.bio = bio
-    if(file) user.photoUrl = cloudResponse.secure_url
+    if (firstName) user.firstName = firstName;
+    if (lastName) user.lastName = lastName;
+    if (occupation) user.occupation = occupation;
+    if (instagram) user.instagram = instagram;
+    if (facebook) user.facebook = facebook;
+    if (linkedin) user.linkedin = linkedin;
+    if (github) user.github = github;
+    if (bio) user.bio = bio;
+    if (file) user.photoUrl = cloudResponse.secure_url;
 
-    await user.save()
+    await user.save();
     return res.status(200).json({
-      message:"Profile Updated Successfully",
-      success:true,
-      user
-    })
+      message: "Profile Updated Successfully",
+      success: true,
+      user,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({
-      success:false,
-      message:"Failed to update profile"
-    })
+      success: false,
+      message: "Failed to update profile",
+    });
   }
-}
-
+};
