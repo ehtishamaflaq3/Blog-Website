@@ -5,14 +5,15 @@ import getDataUri from "../utils/datauri.js";
 // create blog
 export const createBlog = async (req, res) => {
   try {
-    const { title, category } = req.body;
-    if (!title || !category) {
+    const { title, category,subTitle } = req.body;
+    if (!title || !category || !subTitle) {
       return res.status(404).json({
         message: "Blog title and category is required",
       });
     }
     const blog = await blogCollection.create({
       title,
+      subTitle,
       category,
       author: req.id,
     });
@@ -22,12 +23,12 @@ export const createBlog = async (req, res) => {
       blog,
     });
   } catch (error) {
-    console.log(error);
+    console.log("CREATE BLOG ERROR:", error);
     return res.status(500).json({
-      success: false,
-      message: "Failed to create blog",
+        success: false,
+        message: error.message
     });
-  }
+}
 };
 
 // updateblog
