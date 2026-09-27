@@ -128,3 +128,7 @@
     @apply font-sans;
     }
 }
+.jodit- toolbar{
+  background-color: #000000;
+  color: rgba(26,25,25,0.086)
+}

@@ -38,14 +38,12 @@ export const updateblog = async (req, res) => {
     const blogId = req.params.blogId;
     const { title, subtitle, description, category } = req.body;
     const file = req.file;
-
     let blog = await blogCollection.findById(blogId);
     if (!blog) {
       return res.status(404).json({
         message: "Blog not found",
       });
     }
-
     let thumbnail;
     if (file) {
       const fileUri = getDataUri(file);
@@ -75,5 +73,4 @@ export const updateblog = async (req, res) => {
     });
   }
 };
-
 //

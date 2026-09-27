@@ -38,7 +38,7 @@ const CreateBlog = () => {
   const { blog, loading } = useSelector((store) => store.blog);
 
   // toast function
-    function showToast() {
+  function showToast() {
     toast.add({
       title: "Blog Created Successfully",
       description: "Your Blogs",
@@ -51,7 +51,7 @@ const CreateBlog = () => {
       dispatch(setLoading(true));
       const res = await axios.post(
         "http://localhost:3000/api/v1/blog/create-blog",
-        { title, category,subTitle },
+        { title, category, subTitle },
         {
           headers: {
             "Content-Type": "application/json",
@@ -64,8 +64,8 @@ const CreateBlog = () => {
           dispatch(setBlog([res.data.blog]));
         }
         dispatch(setBlog([...blog, res.data.blog]));
-        // navigate(`/dashboard/write-blog/${res.data.blog._id}`);
-        navigate(`/dashboard/your-blog/`);
+        navigate(`/dashboard/create-blog/${res.data.blog._id}`);
+        // navigate(`/dashboard/your-blog/`);
         showToast();
       }
     } catch (error) {
