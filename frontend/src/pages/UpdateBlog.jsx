@@ -38,8 +38,8 @@ const UpdateBlog = () => {
   const { blog } = useSelector((store) => store.blog);
   const selectBlog = blog?.find((blog) => blog._id === id);
   if (!selectBlog) {
-  return <div>Blog not found...</div>;
-}
+    return <div>Blog not found...</div>;
+  }
   const [content, setContent] = useState(selectBlog.description || "");
   const [blogData, setBlogData] = useState({
     title: selectBlog?.title || "",
@@ -164,7 +164,7 @@ const UpdateBlog = () => {
         <div>
           <Label className="text-xl mb-1">Category</Label>
           <Select
-            // value={category}
+            value={blogData?.category}
             items={items}
           >
             <SelectTrigger className="w-full h-10 max-w-65 border-2 p-3 text-2xl">

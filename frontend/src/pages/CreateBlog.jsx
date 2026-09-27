@@ -13,9 +13,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setLoading } from "@/redux/authSlice";
 import axios from "axios";
-import { setBlog } from "@/redux/blogSlice";
+import { setBlog, setLoading } from "@/redux/blogSlice";
 import { toast } from "@/components/ui/toast";
 import { Loader2 } from "lucide-react";
 
@@ -60,10 +59,7 @@ const CreateBlog = () => {
         },
       );
       if (res.data.success) {
-        if (!blog) {
-          dispatch(setBlog([res.data.blog]));
-        }
-        dispatch(setBlog([...blog, res.data.blog]));
+        dispatch(setBlog([...(blog || []), res.data.blog]));
         navigate(`/dashboard/create-blog/${res.data.blog._id}`);
         // navigate(`/dashboard/your-blog/`);
         showToast();
@@ -73,7 +69,7 @@ const CreateBlog = () => {
       console.log("SERVER RESPONSE:", error.response?.data);
       console.log("STATUS:", error.response?.status);
     } finally {
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
   // getting category value
