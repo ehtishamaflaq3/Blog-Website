@@ -31,15 +31,19 @@ const UpdateBlog = () => {
   const editor = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   // taking id of the blog
   const params = useParams();
   const id = params.blogId;
+
   // taking all data of blog from store
   const { blog } = useSelector((store) => store.blog);
   const selectBlog = blog?.find((blog) => blog._id === id);
   if (!selectBlog) {
     return <div>Blog not found...</div>;
   }
+  
+  // setting previous data
   const [content, setContent] = useState(selectBlog.description || "");
   const [blogData, setBlogData] = useState({
     title: selectBlog?.title || "",
@@ -47,10 +51,13 @@ const UpdateBlog = () => {
     description: selectBlog?.description || "",
     category: selectBlog?.category || "",
   });
+
   const [previewThumbnail, setPreviewThumbnail] = useState(
     selectBlog?.thumbnail,
   );
+
   // set all change data in blog section
+
   const handleChange = (e) => {
     const { name, value } = e.target.value;
     setBlogData((prev) => ({
@@ -58,10 +65,12 @@ const UpdateBlog = () => {
       [name]: value,
     }));
   };
+
   // selecting category
   const selectCategory = (value) => {
     setBlogData({ ...blogData, category: value });
   };
+
   // selecting thumbnail
   const selectThumbnail = (e) => {
     const file = e.target.files?.[0];
@@ -72,6 +81,7 @@ const UpdateBlog = () => {
       fileReader.readAsDataURL(file);
     }
   };
+
   // toast of update
   function showToast() {
     toast.add({
@@ -80,6 +90,7 @@ const UpdateBlog = () => {
       type: "success",
     });
   }
+
   //updating all blog data
   const updateBlogHandler = async () => {
     const formData = new FormData();
@@ -163,10 +174,7 @@ const UpdateBlog = () => {
         {/* categories */}
         <div>
           <Label className="text-xl mb-1">Category</Label>
-          <Select
-            value={blogData?.category}
-            items={items}
-          >
+          <Select value={blogData?.category} items={items}>
             <SelectTrigger className="w-full h-10 max-w-65 border-2 p-3 text-2xl">
               <SelectValue />
             </SelectTrigger>
