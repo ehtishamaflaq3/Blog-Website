@@ -14,9 +14,10 @@ import {
 } from "@/components/ui/select";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import store from "@/redux/store";
-import { setLoading } from "@/redux/authSlice";
+import { setBlog, setLoading } from "@/redux/blogSlice";
 import axios from "axios";
+import { Loader2 } from "lucide-react";
+import { toast } from "@/components/ui/toast";
 
 const items = [
   { label: "Select a category", value: null },
@@ -37,12 +38,12 @@ const UpdateBlog = () => {
   const id = params.blogId;
 
   // taking all data of blog from store
-  const { blog } = useSelector((store) => store.blog);
+  const { blog, loading } = useSelector((store) => store.blog);
   const selectBlog = blog?.find((blog) => blog._id === id);
   if (!selectBlog) {
     return <div>Blog not found...</div>;
   }
-  
+
   // setting previous data
   const [content, setContent] = useState(selectBlog.description || "");
   const [blogData, setBlogData] = useState({
@@ -51,15 +52,13 @@ const UpdateBlog = () => {
     description: selectBlog?.description || "",
     category: selectBlog?.category || "",
   });
-
   const [previewThumbnail, setPreviewThumbnail] = useState(
     selectBlog?.thumbnail,
   );
 
   // set all change data in blog section
-
   const handleChange = (e) => {
-    const { name, value } = e.target.value;
+    const { name, value } = e.target;
     setBlogData((prev) => ({
       ...prev,
       [name]: value,
@@ -95,14 +94,16 @@ const UpdateBlog = () => {
   const updateBlogHandler = async () => {
     const formData = new FormData();
     formData.append("title", blogData.title);
-    formData.append("subtitle", blogData.subtitle);
+    formData.append("subTitle", blogData.subtitle);
     formData.append("description", content);
     formData.append("category", blogData.category);
-    formData.append("file", blogData.thumbnail);
+    if (blogData.thumbnail instanceof File) {
+      formData.append("file", blogData.thumbnail);
+    }
     try {
       dispatch(setLoading(true));
       const res = await axios.put(
-        `http://localhost:3000/api/v1/blog/create-blog${id}`,
+        `http://localhost:3000/api/v1/blog/${id}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -110,11 +111,16 @@ const UpdateBlog = () => {
         },
       );
       if (res.data.success) {
-        console.log(blogData);
+        dispatch(
+          setBlog(blog.map((item) => (item._id === id ? res.data.blog : item))),
+        );
         showToast();
       }
     } catch (error) {
-      console.log(error);
+      console.error(
+        "UPDATE BLOG ERROR:",
+        error.response?.data || error.message,
+      );
     } finally {
       dispatch(setLoading(false));
     }
@@ -174,7 +180,11 @@ const UpdateBlog = () => {
         {/* categories */}
         <div>
           <Label className="text-xl mb-1">Category</Label>
-          <Select value={blogData?.category} items={items}>
+          <Select
+            onValueChange={selectCategory}
+            value={blogData?.category}
+            items={items}
+          >
             <SelectTrigger className="w-full h-10 max-w-65 border-2 p-3 text-2xl">
               <SelectValue />
             </SelectTrigger>
@@ -196,20 +206,40 @@ const UpdateBlog = () => {
           <input
             type="file"
             id="file"
+            onChange={selectThumbnail}
             accept="image/*"
             className="dark:border-gray-300 text-xl border-2 border-gray-500 rounded-xl h-12 w-85 p-2"
           />
+          {previewThumbnail && (
+            <img
+              src={previewThumbnail}
+              alt="error"
+              className="w-90 h-70 my-2"
+            />
+          )}
         </div>
         {/* back and save */}
         <div className="flex gap-5">
           <Button
             onClick={() => navigate(-1)}
-            className="w-30 p-3 text-2xl h-13"
+            className="w-45 p-3 text-2xl h-13"
             variant="outline"
           >
             Back
           </Button>
-          <Button className="w-30 p-3 text-2xl h-13">Save</Button>
+          <Button
+            onClick={updateBlogHandler}
+            className="w-45 p-3 text-2xl h-13"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                please wait
+              </>
+            ) : (
+              "Save"
+            )}
+          </Button>
         </div>
       </Card>
     </div>

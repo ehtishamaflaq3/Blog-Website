@@ -36,7 +36,7 @@ export const createBlog = async (req, res) => {
 export const updateblog = async (req, res) => {
   try {
     const blogId = req.params.blogId;
-    const { title, subtitle, description, category } = req.body;
+    const { title, subTitle, description, category } = req.body;
     const file = req.file;
     let blog = await blogCollection.findById(blogId);
     if (!blog) {
@@ -49,14 +49,8 @@ export const updateblog = async (req, res) => {
       const fileUri = getDataUri(file);
       thumbnail = await cloudinary.uploader.upload(fileUri);
     }
-    const updateData = {
-      title,
-      subtitle,
-      description,
-      category,
-      author: req.id,
-      thumbnail: thumbnail?.secure_url,
-    };
+    const updateData = { title, subTitle, description, category };
+    if (thumbnail?.secure_url) updateData.thumbnail = thumbnail.secure_url;
     blog = await blogCollection.findByIdAndUpdate(blogId, updateData, {
       new: true,
     });

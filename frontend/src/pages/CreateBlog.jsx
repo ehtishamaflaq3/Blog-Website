@@ -40,7 +40,7 @@ const CreateBlog = () => {
   function showToast() {
     toast.add({
       title: "Blog Created Successfully",
-      description: "Your Blogs",
+      description: "Now Confirm and Publish",
       type: "success",
     });
   }
