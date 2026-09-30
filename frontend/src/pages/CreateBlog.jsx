@@ -46,7 +46,9 @@ const CreateBlog = () => {
       type: "success",
     });
   }
+  
   // blog handler
+  
   const createBlogHandler = async () => {
     try {
       dispatch(setLoading(true));
