@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+
 export const isAuthenticated=async(req, res,next)=>{
     try {
         const authorization = req.headers.authorization;
