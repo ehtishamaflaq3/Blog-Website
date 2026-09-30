@@ -5,7 +5,7 @@ import getDataUri from "../utils/datauri.js";
 // create blog
 export const createBlog = async (req, res) => {
   try {
-    const { title, category,subTitle } = req.body;
+    const { title, category, subTitle } = req.body;
     if (!title || !category || !subTitle) {
       return res.status(404).json({
         message: "Blog title and category is required",
@@ -25,14 +25,13 @@ export const createBlog = async (req, res) => {
   } catch (error) {
     console.log("CREATE BLOG ERROR:", error);
     return res.status(500).json({
-        success: false,
-        message: error.message
+      success: false,
+      message: error.message,
     });
-}
+  }
 };
 
 // updateblog
-
 export const updateblog = async (req, res) => {
   try {
     const blogId = req.params.blogId;
@@ -67,4 +66,30 @@ export const updateblog = async (req, res) => {
     });
   }
 };
-//
+
+//your all blogs
+export const getOwnBlogs = async (req, res) => {
+  try {
+    const userId = req.id;
+    if (!userId) {
+      return res.status(400).json({
+        message: "User Id is required",
+      });
+    }
+    const blogs = await blogCollection.find({ author: userId }).populate({
+      path: "author",
+      select: "firstName lastName photoUrl",
+    });
+    if (!blogs) {
+      return res
+        .status(404)
+        .json({ message: "No Blogs Found", blogs: [], success: false });
+    }
+    return res.status(200).json({ blogs, success: true });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error Fetching Blogs",
+      error: error.message,
+    });
+  }
+};

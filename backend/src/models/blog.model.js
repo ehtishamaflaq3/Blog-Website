@@ -6,7 +6,7 @@ const blogSchema = new mongoose.Schema(
     subTitle: { type: String, required: true },
     description: { type: String },
     thumbnail: { type: String },
-    author: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    author: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
     category: { type: String },
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
