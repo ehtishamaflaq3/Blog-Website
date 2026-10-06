@@ -6,7 +6,6 @@ import userRouter from "./src/routes/user.route.js";
 import blogRouter from "./src/routes/blog.route.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-
 // middlewares
 app.use(express.json());
 app.use(cookieParser());
@@ -17,16 +16,12 @@ app.use(
     credentials: true,
   }),
 );
-
 // for user resgisteration
 app.use("/api/v1/user", userRouter);
-
 // for blog functioning
 app.use("/api/v1/blog", blogRouter);
-
-// databse cnnection
+// databse conection
 await connectDb();
-
 // server connection
 app.listen(process.env.Port, () => {
   console.log("Server is runing");
