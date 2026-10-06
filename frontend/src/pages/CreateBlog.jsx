@@ -84,6 +84,7 @@ const CreateBlog = () => {
       <Card className="p-5 dark:bg-gray-800">
         <h1 className="text-3xl font-bold"> Lets create blog</h1>
         <p className="text-2xl">
+          
           Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum
           dolor sit amet consectetur adipisicing elit. Iure explicabo unde autem
           libero soluta veniam iusto qui aut minus corruption
