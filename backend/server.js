@@ -1,12 +1,12 @@
-import app from "../../Blog-Website/backend/src/app.js";
 import "dotenv/config";
-import connectDb from "../../Blog-Website/backend/src/db/db.js";
 import express from "express";
+import app from "./src/app.js";
+import connectDb from "./src/db/db.js";
 import userRouter from "./src/routes/user.route.js";
 import blogRouter from "./src/routes/blog.route.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-// middlewares
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -22,7 +22,8 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/blog", blogRouter);
 // databse conection
 await connectDb();
-// server connection
-app.listen(process.env.Port, () => {
-  console.log("Server is runing");
+
+const port = Number(process.env.PORT || process.env.Port || 3000);
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });

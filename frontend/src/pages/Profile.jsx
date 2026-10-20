@@ -98,13 +98,13 @@ const Profile = () => {
   return (
     <div className="h-156 border-gray-700">
       <div className="max-w-6xl mx-auto mt-8">
-        <Card className="flex md:flex-row flex-col gap-10 p-10 md:p-9 dark:bg-gray-800 mx-4 md:mx-0">
+        <Card className="flex md:flex-row border-2 shadow-2xl flex-col gap-10 p-10 md:p-9 dark:bg-gray-800 mx-4 md:mx-0">
           {/* Image Section */}
-          <div className="h-full flex flex-col gap-5 items-center justify-center md:w-[350px]">
-            <Avatar className="w-40 h-40 border-2">
+          <div className="h-full flex flex-col gap-5 items-center justify-center border-4 p-2 shadow-2xl shadow-gray-900 md:w-[350px]">
+            <Avatar className="w-40 shadow-2xl border-4 h-40 border-gray-500">
               <AvatarImage src={user.photoUrl || userLogo} />
             </Avatar>
-            <h1 className="text-3xl font-bold ">
+            <h1 className="text-3xl pl-11 font-bold ">
               {user.occupation || "Mern Stack Developer"}
             </h1>
             <div className="flex gap-4">
@@ -123,8 +123,8 @@ const Profile = () => {
             </div>
           </div>
           {/* info section */}
-          <div className="flex flex-col border-2 p-2 w-full">
-            <h1 className="font-bold text-center  ml-5 text-4xl mb-7">
+          <div className="flex flex-col border-4 p-2 w-full md:w-[750px] shadow-2xl shadow-2yl h-84">
+            <h1 className="font-bold text-center  ml-5 text-4xl mb-2">
               WelCome {user.firstName || "User"} !
             </h1>
             <p className="text-2xl">

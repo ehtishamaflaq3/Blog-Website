@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,6 @@ import { Loader2 } from "lucide-react";
 import { toast } from "@/components/ui/toast";
 
 const items = [
-  { label: "Select a category", value: null },
   { label: "Web Development", value: "Web Development" },
   { label: "Digital Marketing", value: "Digital Marketing" },
   { label: "Blogging", value: "Blogging" },
@@ -37,24 +36,54 @@ const UpdateBlog = () => {
   const params = useParams();
   const id = params.blogId;
 
-  // taking all data of blog from store
+  // Load the selected blog from the API so editing also works after a refresh.
   const { blog, loading } = useSelector((store) => store.blog);
-  const selectBlog = blog?.find((blog) => blog._id === id);
-  if (!selectBlog) {
-    return <div>Blog not found...</div>;
-  }
-
-  // setting previous data
-  const [content, setContent] = useState(selectBlog.description || "");
+  const [selectBlog, setSelectBlog] = useState(null);
+  const [loadError, setLoadError] = useState("");
+  const [content, setContent] = useState("");
   const [blogData, setBlogData] = useState({
-    title: selectBlog?.title || "",
-    subtitle: selectBlog?.subTitle || "",
-    description: selectBlog?.description || "",
-    category: selectBlog?.category || "",
+    title: "",
+    subtitle: "",
+    description: "",
+    category: "",
   });
-  const [previewThumbnail, setPreviewThumbnail] = useState(
-    selectBlog?.thumbnail,
-  );
+  const [previewThumbnail, setPreviewThumbnail] = useState("");
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadBlog = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:3000/api/v1/blog/${id}`,
+          { withCredentials: true, timeout: 15000 },
+        );
+        if (!isMounted) return;
+
+        const loadedBlog = res.data.blog;
+        setSelectBlog(loadedBlog);
+        setBlogData({
+          title: loadedBlog.title || "",
+          subtitle: loadedBlog.subTitle || "",
+          description: loadedBlog.description || "",
+          category: loadedBlog.category || "",
+        });
+        setContent(loadedBlog.description || "");
+        setPreviewThumbnail(loadedBlog.thumbnail || "");
+      } catch (error) {
+        if (isMounted) {
+          setLoadError(
+            error.response?.data?.message || "Could not load this blog.",
+          );
+        }
+      }
+    };
+
+    loadBlog();
+    return () => {
+      isMounted = false;
+    };
+  }, [id]);
 
   // set all change data in blog section
   const handleChange = (e) => {
@@ -67,14 +96,14 @@ const UpdateBlog = () => {
 
   // selecting category
   const selectCategory = (value) => {
-    setBlogData({ ...blogData, category: value });
+    setBlogData((previous) => ({ ...previous, category: value }));
   };
 
   // selecting thumbnail
   const selectThumbnail = (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      setBlogData({ ...blogData, thumbnail: file });
+      setBlogData((previous) => ({ ...previous, thumbnail: file }));
       const fileReader = new FileReader();
       fileReader.onloadend = () => setPreviewThumbnail(fileReader.result);
       fileReader.readAsDataURL(file);
@@ -92,6 +121,15 @@ const UpdateBlog = () => {
 
   //updating all blog data
   const updateBlogHandler = async () => {
+    if (!blogData.title.trim() || !blogData.subtitle.trim() || !blogData.category) {
+      toast.add({
+        title: "Complete all fields",
+        description: "Title, subtitle, and category are required.",
+        type: "error",
+      });
+      return;
+    }
+
     const formData = new FormData();
     formData.append("title", blogData.title);
     formData.append("subTitle", blogData.subtitle);
@@ -108,23 +146,41 @@ const UpdateBlog = () => {
         {
           headers: { "Content-Type": "multipart/form-data" },
           withCredentials: true,
+          timeout: 15000,
         },
       );
       if (res.data.success) {
+        const existingBlogs = Array.isArray(blog) ? blog : [];
         dispatch(
-          setBlog(blog.map((item) => (item._id === id ? res.data.blog : item))),
+          setBlog([
+            ...existingBlogs.filter((item) => item._id !== id),
+            res.data.blog,
+          ]),
         );
+        setSelectBlog(res.data.blog);
         showToast();
+        navigate('/dashboard/your-blog');
       }
     } catch (error) {
-      console.error(
-        "UPDATE BLOG ERROR:",
-        error.response?.data || error.message,
-      );
+      toast.add({
+        title: "Could not update blog",
+        description:
+          error.response?.data?.message ||
+          "Check that the backend server is running and try again.",
+        type: "error",
+      });
     } finally {
       dispatch(setLoading(false));
     }
   };
+
+  if (loadError) {
+    return <div className="p-6 text-red-500">{loadError}</div>;
+  }
+  if (!selectBlog) {
+    return <div className="p-6">Loading blog...</div>;
+  }
+
   return (
     <div className="md:pr-8 md:ml-[40px] pt-6">
       <Card className="h-[calc(100vh-80px)] overflow-y-auto p-4 dark:bg-gray-800 ">
@@ -173,7 +229,7 @@ const UpdateBlog = () => {
           <JodeEditor
             ref={editor}
             className="jodit- toolbar"
-            value={blogData?.description || ""}
+            value={content}
             onChange={(newContent) => setContent(newContent)}
           />
         </div>
@@ -228,6 +284,7 @@ const UpdateBlog = () => {
             Back
           </Button>
           <Button
+            disabled={loading}
             onClick={updateBlogHandler}
             className="w-45 p-3 text-2xl h-13"
           >

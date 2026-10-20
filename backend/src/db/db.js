@@ -1,12 +1,14 @@
 import mongoose from "mongoose";
-import 'dotenv/config'
+import "dotenv/config";
 
-const connectDb=async()=>{
-    try {
-        await mongoose.connect(process.env.Mongodb_Url);
-        console.log("Mongodb is connected....");
-    } catch (error) {
-        console.log(error);
-    }
+const connectDb = async () => {
+  const mongoUrl = process.env.Mongodb_Url || process.env.MONGODB_URI;
+  if (!mongoUrl) {
+    throw new Error("Set MONGODB_URI in the backend .env file.");
+  }
+
+  await mongoose.connect(mongoUrl, { serverSelectionTimeoutMS: 10000 });
+  console.log("MongoDB connected.");
 };
+
 export default connectDb;

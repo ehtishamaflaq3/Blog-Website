@@ -143,7 +143,6 @@ export const logout = async (_, res) => {
 };
 
 // user edit profile
-
 export const updateProfile = async (req, res) => {
   try {
     const userId = req.id;
@@ -158,7 +157,6 @@ export const updateProfile = async (req, res) => {
       bio,
     } = req.body;
     const file = req.file;
-
     let cloudResponse;
     if (file) {
       const fileUri = getDataUri(file);

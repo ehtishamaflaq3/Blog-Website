@@ -3,6 +3,7 @@ import authSlice from "./authSlice";
 import themeSlice from "./themeSlice";
 import blogSlice from './blogSlice'
 import {
+  createMigrate,
   persistReducer,
   FLUSH,
   REHYDRATE,
@@ -14,10 +15,22 @@ import {
 import storageModule from "redux-persist/lib/storage";
 
 const storage = storageModule.default;
+const migrations = {
+  2: (state) => {
+    if (!state) return state;
+    return {
+      ...state,
+      blog: { loading: false, blog: [] },
+    };
+  },
+};
+
 const persistConfig = {
   key: "root",
-  version: 1,
+  version: 2,
   storage,
+  blacklist: ["blog"],
+  migrate: createMigrate(migrations),
 };
 const rootReducer = combineReducers({
   auth: authSlice,
