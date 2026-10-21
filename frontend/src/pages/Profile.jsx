@@ -28,9 +28,9 @@ import { toast } from "@/components/ui/toast";
 import { Loader2 } from "lucide-react";
 
 const Profile = () => {
-  const { user,loading  } = useSelector((store) => store.auth);
-  const dispatch =useDispatch()
-  const [open,setopen] = useState(false)
+  const { user, loading } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
+  const [open, setopen] = useState(false);
   const [input, setInput] = useState({
     firstName: user?.firstName,
     lastName: user?.lastName,
@@ -63,48 +63,51 @@ const Profile = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("firstName",input.firstName);
-    formData.append("lastName",input.lastName);
-    formData.append("bio",input.bio);
-    formData.append("occupation",input.occupation);
-    formData.append("facebook",input.facebook);
-    formData.append("linkedin",input.linkedin);
-    formData.append("instagram",input.instagram);
-    formData.append("github",input.github);
+    formData.append("firstName", input.firstName);
+    formData.append("lastName", input.lastName);
+    formData.append("bio", input.bio);
+    formData.append("occupation", input.occupation);
+    formData.append("facebook", input.facebook);
+    formData.append("linkedin", input.linkedin);
+    formData.append("instagram", input.instagram);
+    formData.append("github", input.github);
     if (input?.file) {
-      formData.append("file",input?.file)
+      formData.append("file", input?.file);
     }
     console.log(input);
     try {
       dispatch(setLoading(true));
-      const res = await axios.put('http://localhost:3000/api/v1/user/profile/update',formData,{
-        headers:{
-          "Content-Type":"multipart/form-data"
+      const res = await axios.put(
+        "http://localhost:3000/api/v1/user/profile/update",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
         },
-        withCredentials:true
-      })
+      );
       if (res.data.success) {
-        setopen(false)
+        setopen(false);
         // toast.success(res.data.message)
-        dispatch(setUser(res.data.user))
+        dispatch(setUser(res.data.user));
       }
     } catch (error) {
-      console.log(error)
-    }
-    finally{
-      dispatch(setLoading(false))
+      console.log(error);
+    } finally {
+      dispatch(setLoading(false));
     }
   };
   return (
     <div className="h-156 border-gray-700">
       <div className="max-w-6xl mx-auto mt-8">
-        <Card className="flex md:flex-row border-2 shadow-2xl flex-col gap-10 p-10 md:p-9 dark:bg-gray-800 mx-4 md:mx-0">
+        <Card className="flex md:flex-row border-4 flex-col border-gray-500  dark:border-4 dark:border-gray-500 gap-10 p-10 md:p-9 dark:bg-gray-800 mx-4 md:mx-0">
           {/* Image Section */}
-          <div className="h-full flex flex-col gap-5 items-center justify-center border-4 p-2 shadow-2xl shadow-gray-900 md:w-[350px]">
+          <div className="h-full flex flex-col gap-5 items-center rounded-3xl border-gray-500 dark:border-4 dark:border-gray-500 justify-center border-4 p-2 shadow-2xl dark:shadow-2xl dark:shadow-gray-500 shadow-gray-900 md:w-[350px]">
             <Avatar className="w-40 shadow-2xl border-4 h-40 border-gray-500">
               <AvatarImage src={user.photoUrl || userLogo} />
             </Avatar>
-            <h1 className="text-3xl pl-11 font-bold ">
+            <h1 className="text-3xl pl-20 font-bold ">
               {user.occupation || "Mern Stack Developer"}
             </h1>
             <div className="flex gap-4">
@@ -123,7 +126,7 @@ const Profile = () => {
             </div>
           </div>
           {/* info section */}
-          <div className="flex flex-col border-4 p-2 w-full md:w-[750px] shadow-2xl shadow-2yl h-84">
+          <div className="flex flex-col border-4 p-2 w-full md:w-[750px] border-gray-500 dark:border-4 dark:border-gray-600 rounded-3xl shadow-gray-900 dark:shadow-2xl dark:shadow-gray-500 shadow-2xl shadow-2yl h-84">
             <h1 className="font-bold text-center  ml-5 text-4xl mb-2">
               WelCome {user.firstName || "User"} !
             </h1>
@@ -142,7 +145,10 @@ const Profile = () => {
               <form onSubmit={submitHandler}>
                 <DialogTrigger
                   render={
-                    <Button onClick={()=>setopen(true)} className="h-14 px-4 rounded-2xl text-lg font-bold md:ml-80 bg-black cursor-pointer text-white border-4 w-[24%] border-gray-400 hover:bg-gray-500 hover:text-gray-800">
+                    <Button
+                      onClick={() => setopen(true)}
+                      className="h-14 px-4 rounded-2xl text-lg font-bold md:ml-80 bg-black cursor-pointer text-white border-4 w-[24%] border-gray-400 hover:bg-gray-500 hover:text-gray-800"
+                    >
                       Edit Profile
                     </Button>
                   }
@@ -154,7 +160,7 @@ const Profile = () => {
                       Make changes to your profile here.
                     </DialogDescription>
                   </DialogHeader>
-                  {/* name */}            
+                  {/* name */}
                   <FieldGroup className="flex flex-row">
                     <Field>
                       <Label htmlFor="firstname-1">First Name</Label>
@@ -224,14 +230,14 @@ const Profile = () => {
                         placeholder="www.github.com"
                       />
                     </Field>
-                  </FieldGroup>                  
+                  </FieldGroup>
                   {/* description */}
                   <Label>Description</Label>
                   <Textarea
                     className="col-span-1 text-gray-500"
-                        value={input.bio}
-                        name="bio"
-                        onChange={changeEventHandler}
+                    value={input.bio}
+                    name="bio"
+                    onChange={changeEventHandler}
                     placeholder="Enter Description here..."
                   />
                   {/* Picture */}
@@ -240,22 +246,35 @@ const Profile = () => {
                     className="border-4 h-12 text-center"
                     type="file"
                     name="pic"
-                    id="pic" 
+                    id="pic"
                     onChange={changeFileHandler}
                   />
                   {/* footer form section */}
                   <DialogFooter className="border-4 ">
                     <DialogClose
-                      render={<Button className="bg-black h-12 shadow-2xl text-white rounded-2xl cursor-pointer w-[45%] font-bold text-xl" variant="outline">Cancel</Button>}
+                      render={
+                        <Button
+                          className="bg-black h-12 shadow-2xl text-white rounded-2xl cursor-pointer w-[45%] font-bold text-xl"
+                          variant="outline"
+                        >
+                          Cancel
+                        </Button>
+                      }
                     />
-                    <Button className="bg-black h-12 text-white shadow-2xl rounded-2xl cursor-pointer w-[45%] font-bold text-xl" onClick={submitHandler} type="submit">{
-                      loading ?(
+                    <Button
+                      className="bg-black h-12 text-white shadow-2xl rounded-2xl cursor-pointer w-[45%] font-bold text-xl"
+                      onClick={submitHandler}
+                      type="submit"
+                    >
+                      {loading ? (
                         <>
-                        <Loader2 className="mr-2 w-4 h-4 animate-spin"/>
-                        Please wait
+                          <Loader2 className="mr-2 w-4 h-4 animate-spin" />
+                          Please wait
                         </>
-                      ):("Save changes")
-                      }</Button>
+                      ) : (
+                        "Save changes"
+                      )}
+                    </Button>
                   </DialogFooter>
                 </DialogContent>
               </form>
