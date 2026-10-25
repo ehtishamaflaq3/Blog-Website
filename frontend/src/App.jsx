@@ -12,6 +12,7 @@ import YourBlog from "./pages/YourBlog";
 import Comments from "./pages/Comments";
 import CreateBlog from "./pages/CreateBlog";
 import UpdateBlog from "./pages/UpdateBlog";
+import BlogsView from "./pages/BlogsView";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -30,6 +31,15 @@ const router = createBrowserRouter([
         <Blogs />
       </>
     ),
+  },
+  {
+    path:"/blogs/:blogId",
+    element:(
+      <>
+      <Navbar/>
+      <BlogsView/>
+      </>
+    )
   },
   {
     path: "/about",

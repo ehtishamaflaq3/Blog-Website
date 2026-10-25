@@ -101,7 +101,7 @@ const YourBlog = () => {
     <div className="h-full min-h-0 p-3 pt-6 md:pl-6 md:pr-8">
       <Card className="flex h-full min-h-0 flex-col overflow-hidden p-4 dark:bg-gray-800">
         <div className="mb-3 flex shrink-0 items-center justify-between gap-3">
-          <h1 className="text-xl font-semibold">Your Blogs</h1>
+          <h1 className="text-2xl font-semibold">Your Blogs</h1>
           {!loading && !errorMessage && (
             <span className="text-sm text-muted-foreground">
               {blogs.length} {blogs.length === 1 ? "blog" : "blogs"}
@@ -155,7 +155,7 @@ const YourBlog = () => {
                             className="hidden h-25 w-35 rounded-md object-cover sm:block"
                           />
                         )}
-                        <span className="max-w-[280px] truncate pl-10 font-medium">
+                        <span onClick={()=>navigate(`/blogs/${item._id}`)} className="max-w-[280px] hover:underline cursor-pointer truncate pl-9 font-medium">
                           {item.title || "Untitled blog"}
                         </span>
                       </div>

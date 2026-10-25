@@ -75,7 +75,7 @@ const Login = () => {
       {/* form section */}
       <div className="w-full lg:w-[50%] flex items-center justify-center px-4 py-4 sm:px-6 lg:px-8 lg:py-0">
         <form onSubmit={handleSubmit}
-          className="dark:bg-gray-500 w-full border-4 max-w-xl rounded-2xl border-gray-500 bg-white p-4 shadow-2xl sm:p-6 lg:p-6 lg:max-h-[90vh]"
+          className="dark:bg-gray-500 w-full border-6 max-w-xl rounded-2xl  border-gray-700 dark:shadow-2xl dark:shadow-gray-200 bg-white p-4 shadow-2xl sm:p-6 lg:p-6 lg:max-h-[90vh]"
           action=""
         >
           <h1 className="text-2xl font-extrabold sm:text-3xl dark:text-black text-center ">
@@ -88,7 +88,7 @@ const Login = () => {
           {/* email and passwords */}
           <div className="mt-4 flex flex-col gap-4">
             <div>
-              <label className="mb-2 block dark:text-black text-lg sm:text-2xl" htmlFor="">
+              <label className="mb-2 block dark:text-black font-bold text-lg sm:text-2xl" htmlFor="">
                 Email
               </label>
               <input
@@ -96,18 +96,18 @@ const Login = () => {
                 name="email"
                 value={loginuser.email}
                 onChange={handleChange}
-                className="h-12 w-full rounded-2xl border border-gray-400 pl-3 dark:text-black  text-base shadow-2xl sm:h-14 sm:text-xl"
+                className="h-12 w-full rounded-2xl border-4 border-gray-700 pl-3 dark:text-black  text-base shadow-gray-900 shadow-2xl dark:shadow-gray-900 sm:h-14 sm:text-xl"
                 placeholder="Enter your Email..."
               />
             </div>
             <div>
-              <label htmlFor="" className="mb-2 block text-lg dark:text-black  sm:text-2xl">
+              <label htmlFor="" className="mb-2 block text-lg dark:text-black font-bold sm:text-2xl">
                 Password
               </label>
               <div className="relative w-full">
                 <input
                   type={showPassword ? "text" : "password"}
-                  className="h-12 w-full rounded-2xl border border-gray-400 dark:text-black  pl-3 pr-12 text-base shadow-2xl sm:h-14 sm:text-xl"
+                  className="h-12 w-full rounded-2xl border-4 border-gray-700 dark:shadow-gray-900 dark:text-black  pl-3 pr-12 text-base shadow-2xl sm:h-14 sm:text-xl"
                   name="password"
                   value={loginuser.password}
                   onChange={handleChange}
@@ -125,10 +125,10 @@ const Login = () => {
             </div>
           </div>
 
-          <button className="mt-4 flex h-12 w-full items-center justify-center rounded-2xl bg-black text-xl font-bold text-white shadow-md transition hover:bg-gray-600 cursor-pointer sm:h-14 sm:text-2xl">
+          <button className="mt-9 flex h-12 w-full items-center justify-center rounded-2xl bg-black text-xl font-bold text-white shadow-md transition hover:bg-gray-600 cursor-pointer sm:h-14 sm:text-2xl">
             Log in 
           </button>
-          <p className="mt-3 text-center text-sm sm:text-base dark:text-black ">
+          <p className="mt-4 text-center text-sm sm:text-base dark:text-black ">
             Don't have an account?{" "}
             <Link to={"/signup"}>
               <span className="cursor-pointer underline text-gray-500 dark:text-black ">
