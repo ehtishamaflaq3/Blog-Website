@@ -58,7 +58,7 @@ const Signup = () => {
   return (
     <div className="h-full w-full flex flex-col lg:flex-row lg:overflow-hidden">
       {/* image section */}
-      <div className="w-full lg:w-[50%]">
+      <div className="w-full lg:w-[50%]"> 
         <img
           src={authimg}
           className="h-56 w-full object-cover sm:h-72 lg:h-full"
@@ -67,10 +67,10 @@ const Signup = () => {
       </div>
 
       {/* form section */}
-      <div className="w-full dark:text-black  lg:w-[50%] flex items-center justify-center px-4 py-4 sm:px-6 lg:px-8 lg:py-0">
+      <div className="w-full dark:text-black lg:w-[50%] flex items-center justify-center px-4 py-4 sm:px-6 lg:px-8 lg:py-0">
         <form
           onSubmit={handleSubmit}
-          className="w-full max-w-xl rounded-2xl border dark:bg-gray-500 border-gray-500 bg-white dark:text-black  p-4 shadow-2xl sm:p-6 lg:p-6 lg:max-h-[90vh]"
+          className="w-full max-w-xl rounded-2xl border dark:bg-gray-500 border-gray-500 dark:shadow-2xl dark:border-6 dark:border-gray-700 dark:shadow-gray-200 bg-white dark:text-black  p-4 shadow-2xl sm:p-6 lg:p-6 lg:max-h-[90vh]"
           action=""
         >
           <h1 className="text-2xl font-extrabold sm:text-3xl">
@@ -94,7 +94,7 @@ const Signup = () => {
                 name="firstName"
                 value={user.firstName}
                 onChange={handleChange}
-                className="h-12 w-full rounded-2xl border border-gray-400 pl-3 text-base shadow-2xl sm:h-14 sm:text-xl"
+                className="h-12 w-full rounded-2xl border-gray-800 pl-3 text-base dark:shadow-gray-900 border-2 shadow-2xl sm:h-14 sm:text-xl"
                 placeholder="First Name"
               />
             </div>
@@ -106,7 +106,7 @@ const Signup = () => {
                 Last Name
               </label>
               <input
-                className="h-12 w-full rounded-2xl border border-gray-400 pl-3 text-base shadow-2xl sm:h-14 sm:text-xl"
+                className="h-12 w-full rounded-2xl border-gray-800 pl-3 text-base dark:shadow-gray-900 border-2 shadow-2xl sm:h-14 sm:text-xl"
                 type="text"
                 value={user.lastName}
                 name="lastName"
@@ -126,7 +126,7 @@ const Signup = () => {
                 name="email"
                 onChange={handleChange}
                 value={user.email}
-                className="h-12 w-full rounded-2xl border border-gray-400 pl-3 text-base shadow-2xl sm:h-14 sm:text-xl"
+                className="h-12 w-full rounded-2xl border-gray-800 dark:shadow-gray-900 border-2 pl-3 text-base shadow-2xl sm:h-14 sm:text-xl"
                 placeholder="johndoe@example.com"
               />
             </div>
@@ -137,7 +137,7 @@ const Signup = () => {
               <div className="relative w-full">
                 <input
                   type={showPassword ? "text" : "password"}
-                  className="h-12 w-full rounded-2xl border border-gray-400 pl-3 pr-12 text-base shadow-2xl sm:h-14 sm:text-xl"
+                  className="h-12 w-full rounded-2xl border-gray-800 pl-3 pr-12 text-base dark:shadow-gray-900 border-2 shadow-2xl sm:h-14 sm:text-xl"
                   value={user.password}
                   name="password"
                   onChange={handleChange}
@@ -154,7 +154,7 @@ const Signup = () => {
               </div>
             </div>
           </div>
-          <button className="mt-4 flex h-12 w-full items-center justify-center rounded-2xl bg-black text-xl font-bold text-white shadow-md transition cursor-pointer hover:bg-gray-600 sm:h-14 sm:text-2xl">
+          <button className="mt-8 flex h-12 w-full items-center justify-center rounded-2xl bg-black text-xl font-bold text-white shadow-md transition cursor-pointer hover:bg-gray-600 sm:h-14 sm:text-2xl">
             Sign Up
           </button>
           <p className="mt-3 text-center text-sm sm:text-base">

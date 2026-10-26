@@ -75,7 +75,7 @@ const Login = () => {
       {/* form section */}
       <div className="w-full lg:w-[50%] flex items-center justify-center px-4 py-4 sm:px-6 lg:px-8 lg:py-0">
         <form onSubmit={handleSubmit}
-          className="dark:bg-gray-500 w-full border-6 max-w-xl rounded-2xl  border-gray-700 dark:shadow-2xl dark:shadow-gray-200 bg-white p-4 shadow-2xl sm:p-6 lg:p-6 lg:max-h-[90vh]"
+          className="dark:bg-gray-500 w-full shadow-gray-900 border-6 max-w-xl rounded-2xl  border-gray-700 dark:shadow-2xl dark:shadow-gray-200 bg-white p-4 shadow-2xl sm:p-6 lg:p-6 lg:max-h-[90vh]"
           action=""
         >
           <h1 className="text-2xl font-extrabold sm:text-3xl dark:text-black text-center ">
@@ -107,7 +107,7 @@ const Login = () => {
               <div className="relative w-full">
                 <input
                   type={showPassword ? "text" : "password"}
-                  className="h-12 w-full rounded-2xl border-4 border-gray-700 dark:shadow-gray-900 dark:text-black  pl-3 pr-12 text-base shadow-2xl sm:h-14 sm:text-xl"
+                  className="h-12 w-full rounded-2xl border-4 border-gray-700 dark:shadow-gray-900 dark:text-black  pl-3 pr-12 text-base shadow-gray-900 shadow-2xl sm:h-14 sm:text-xl"
                   name="password"
                   value={loginuser.password}
                   onChange={handleChange}
