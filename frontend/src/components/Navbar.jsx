@@ -1,4 +1,4 @@
-import { setUser } from "../redux/authSlice";
+import { setUser } from "../pages/redux/authSlice";
 import axios from "axios";
 import logo from "../assets/logo.png";
 import userlogo from '../assets/user.jpg'
@@ -6,7 +6,7 @@ import { IoSearch } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleTheme } from "../redux/themeSlice";
+import { toggleTheme } from "../pages/redux/themeSlice";
 import { Button } from "@/components/ui/button";
 import * as React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

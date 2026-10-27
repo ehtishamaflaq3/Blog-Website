@@ -4,7 +4,7 @@ import authimg from "../assets/auth.jpg";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import {useDispatch} from 'react-redux'
-import { setUser } from "../redux/authSlice.js";
+import { setUser } from "./redux/authSlice.js";
 import { toast } from "@/components/ui/toast"
 
 const Login = () => {

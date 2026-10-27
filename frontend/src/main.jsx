@@ -5,7 +5,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 
 import App from "./App.jsx";
-import store from "./redux/store.js";
+import store from "./pages/redux/store.js";
 import ThemeProvider from "./components/ThemeProvider.jsx";
 
 import { PersistGate } from "redux-persist/integration/react";

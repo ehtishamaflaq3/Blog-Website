@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setBlog, setLoading } from "@/redux/blogSlice";
+import { setBlog, setLoading } from "@/pages/redux/blogSlice";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { toast } from "@/components/ui/toast";

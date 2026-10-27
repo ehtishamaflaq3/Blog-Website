@@ -23,6 +23,8 @@ import {
 import { Edit, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/toast";
+import { useDispatch } from "react-redux";
+import { setBlog } from "@/pages/redux/blogSlice";
 
 const YourBlog = () => {
   const [blogs, setBlogs] = useState([]);
@@ -30,6 +32,7 @@ const YourBlog = () => {
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const deleteBlog = async (id) => {
     if (deletingId) return;
     setDeletingId(id);
@@ -74,6 +77,7 @@ const YourBlog = () => {
           throw new Error("The server returned an invalid blogs list.");
         }
         setBlogs(loadedBlogs);
+        dispatch(setBlog(loadedBlogs));
         setErrorMessage("");
       })
       .catch((error) => {
@@ -155,7 +159,10 @@ const YourBlog = () => {
                             className="hidden h-25 w-35 rounded-md object-cover sm:block"
                           />
                         )}
-                        <span onClick={()=>navigate(`/blogs/${item._id}`)} className="max-w-[280px] hover:underline cursor-pointer truncate pl-9 font-medium">
+                        <span
+                          onClick={() => navigate(`/blogs/${item._id}`)}
+                          className="max-w-[280px] hover:underline cursor-pointer truncate pl-9 font-medium"
+                        >
                           {item.title || "Untitled blog"}
                         </span>
                       </div>
