@@ -82,7 +82,7 @@ const Login = () => {
           alt="Creative Workspace"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950/80 via-slate-950/45 to-indigo-950/30" />
+        <div className="absolute inset-0 from-slate-950/80 via-slate-950/45 to-indigo-950/30" />
 
         <div className="relative z-10 max-w-lg space-y-5 text-center text-white lg:text-left">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold backdrop-blur-md">
