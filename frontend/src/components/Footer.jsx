@@ -17,7 +17,7 @@ const Footer = () => {
                 alt="DevPulse Logo"
                 className="size-11 object-contain dark:invert"
               />
-              <span className="font-extrabold text-2xl tracking-tight bg-gradient-to-r from-primary to-muted-foreground bg-clip-text text-transparent">
+              <span className="font-extrabold text-2xl tracking-tight from-primary to-muted-foreground bg-clip-text text-transparent">
                 DevPulse
               </span>
             </div>
