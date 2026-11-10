@@ -85,13 +85,13 @@ const Login = () => {
         <div className="absolute inset-0 from-slate-950/80 via-slate-950/45 to-indigo-950/30" />
 
         <div className="relative z-10 max-w-lg space-y-5 text-center text-white lg:text-left">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold backdrop-blur-md">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold backdrop-blur-xs">
             <span>Join 10,000+ Tech Enthusiasts</span>
           </div>
-          <h2 className="text-3xl font-extrabold leading-tight tracking-tight xl:text-4xl">
+          <h2 className="text-3xl backdrop-blur-xs font-extrabold leading-tight tracking-tight xl:text-4xl">
             "Words have the power to transform code into shared wisdom."
           </h2>
-          <p className="max-w-md text-sm leading-6 text-white/75">
+          <p className="max-w-md text-sm leading-6 text-white/75 backdrop-blur-xs">
             Sign in to publish tutorials, track comments on your stories, and
             connect with like-minded developers worldwide.
           </p>
