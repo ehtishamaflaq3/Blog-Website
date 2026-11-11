@@ -8,7 +8,7 @@ import logo from "../assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/toast";
-import { Eye, EyeOff, Loader2, Lock, Mail, Sparkles } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -82,13 +82,13 @@ const Login = () => {
           alt="Creative Workspace"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 from-slate-950/80 via-slate-950/45 to-indigo-950/30" />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950/80 via-slate-950/45 to-indigo-950/30" />
 
         <div className="relative z-10 max-w-lg space-y-5 text-center text-white lg:text-left">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold backdrop-blur-xs">
             <span>Join 10,000+ Tech Enthusiasts</span>
           </div>
-          <h2 className="text-3xl backdrop-blur-xs font-extrabold leading-tight tracking-tight xl:text-4xl">
+          <h2 className="text-3xl font-extrabold leading-tight backdrop-blur-xs tracking-tight xl:text-4xl">
             "Words have the power to transform code into shared wisdom."
           </h2>
           <p className="max-w-md text-sm leading-6 text-white/75 backdrop-blur-xs">
@@ -99,11 +99,11 @@ const Login = () => {
       </div>
 
       {/* Right Column: Form Container */}
-      <div className="flex min-h-0 items-center justify-center overflow-hidden px-4 py-3 sm:px-6 sm:py-5 lg:px-10 lg:py-8">
-        <div className="w-full max-w-md space-y-5 rounded-3xl border border-border/70 bg-card/70 p-5 shadow-xl shadow-black/5 sm:p-7">
+      <div className="flex min-h-0 items-center justify-center overflow-hidden px-4 py-3 max-[700px]:py-1 sm:px-6 sm:py-5 lg:px-10 lg:py-8">
+        <div className="w-full max-w-md space-y-5 rounded-3xl border border-border/70 bg-card/70 p-5 shadow-xl shadow-black/5 max-[700px]:space-y-3 max-[700px]:p-3 sm:p-7">
           {/* Header */}
           <div className="space-y-2 text-center lg:text-left">
-            <div className="mb-3 flex items-center justify-center gap-2.5 lg:justify-start">
+            <div className="mb-3 flex items-center justify-center gap-2.5 max-[700px]:mb-1 lg:justify-start">
               <img
                 src={logo}
                 alt="DevPulse Logo"
@@ -122,7 +122,7 @@ const Login = () => {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-3.5">
+          <form onSubmit={handleSubmit} className="space-y-3.5 max-[700px]:space-y-2">
             {/* Email Field */}
             <div className="space-y-1.5">
               <Label className="text-xs font-semibold">Email Address</Label>
@@ -135,7 +135,7 @@ const Login = () => {
                   onChange={handleChange}
                   placeholder="you@domain.com"
                   required
-                  className="h-10 w-full rounded-xl border border-border bg-background/80 pl-9 pr-3 text-sm text-foreground transition focus:outline-none focus:ring-2 focus:ring-primary/40"
+                  className="h-10 w-full rounded-xl border border-border bg-background/80 pl-9 pr-3 text-sm text-foreground transition focus:outline-none focus:ring-2 focus:ring-primary/40 max-[700px]:h-9"
                 />
               </div>
             </div>
@@ -152,7 +152,7 @@ const Login = () => {
                   onChange={handleChange}
                   placeholder="••••••••"
                   required
-                  className="h-10 w-full rounded-xl border border-border bg-background/80 pl-9 pr-10 text-sm text-foreground transition focus:outline-none focus:ring-2 focus:ring-primary/40"
+                  className="h-10 w-full rounded-xl border border-border bg-background/80 pl-9 pr-10 text-sm text-foreground transition focus:outline-none focus:ring-2 focus:ring-primary/40 max-[700px]:h-9"
                 />
                 <button
                   type="button"
@@ -173,7 +173,7 @@ const Login = () => {
             <Button
               type="submit"
               disabled={loading}
-              className="mt-1 h-10 w-full gap-2 rounded-xl font-semibold shadow-xs"
+              className="mt-1 h-10 w-full gap-2 rounded-xl font-semibold shadow-xs max-[700px]:h-9"
             >
               {loading ? (
                 <>
