@@ -1,171 +1,235 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import authimg from "../assets/auth.jpg";
 import axios from "axios";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import authimg from "../assets/auth.jpg";
+import logo from "../assets/logo.png";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/toast";
+import { Eye, EyeOff, Loader2, Lock, Mail, User } from "lucide-react";
+
 const Signup = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [user, setuser] = useState(
-    {
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
-  }
-);
+  });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setuser((prev) => ({
+    setUser((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(user);
+    if (
+      !user.firstName.trim() ||
+      !user.lastName.trim() ||
+      !user.email.trim() ||
+      !user.password
+    ) {
+      toast.add({
+        title: "Required fields missing",
+        description: "Please complete all fields to sign up.",
+        type: "error",
+      });
+      return;
+    }
+
+    setLoading(true);
     try {
-      const req = await axios.post(
+      const res = await axios.post(
         "http://localhost:3000/api/v1/user/signup",
         user,
         {
-          headers: {
-            "Content-type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           withCredentials: true,
         },
       );
-      console.log("response", req.data);
-      if (req.data.success) {
+
+      if (res.data.success) {
         toast.add({
-          title: "Account Created",
-          description: "Your account has been created successfully.",
+          title: "Account Created!",
+          description: "Your account has been created. Please log in.",
           type: "success",
         });
         navigate("/login");
       }
     } catch (error) {
-      console.log(error);
       toast.add({
         title: "Signup Failed",
-        description: error.response?.data?.message || "Something went wrong.",
+        description:
+          error.response?.data?.message ||
+          "Could not create your account. Please try again.",
         type: "error",
       });
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
-    <div className="h-full w-full flex flex-col lg:flex-row lg:overflow-hidden">
-      {/* image section */}
-      <div className="w-full lg:w-[50%]"> 
+    <div className="grid h-full min-h-0 w-full grid-cols-1 overflow-hidden bg-background text-foreground transition-colors lg:grid-cols-2">
+      {/* Left Column: Visual Showcase */}
+      <div className="relative hidden min-h-0 items-center justify-center overflow-hidden bg-muted lg:flex">
         <img
           src={authimg}
-          className="h-56 w-full object-cover sm:h-72 lg:h-full"
-          alt="error"
+          alt="Creative Workspace"
+          className="absolute inset-0 h-full w-full object-cover"
         />
+        <div className="absolute inset-0 from-slate-950/80 via-slate-950/45 to-indigo-950/30" />
+        <div className="relative z-10 max-w-lg space-y-5 p-12 text-center text-white lg:text-left">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold backdrop-blur-md">
+            <span>Start Your Writing Journey</span>
+          </div>
+          <h2 className="text-3xl font-extrabold leading-tight tracking-tight xl:text-4xl">
+            "Your perspective might be the exact answer another developer is
+            searching for."
+          </h2>
+          <p className="max-w-md text-sm leading-6 text-white/75">
+            Publish your stories, build your personal brand, and become a
+            recognized voice in modern web engineering.
+          </p>
+        </div>
       </div>
 
-      {/* form section */}
-      <div className="w-full dark:text-black lg:w-[50%] flex items-center justify-center px-4 py-4 sm:px-6 lg:px-8 lg:py-0">
-        <form
-          onSubmit={handleSubmit}
-          className="w-full max-w-xl rounded-2xl border dark:bg-gray-500 border-gray-500 dark:shadow-2xl dark:border-6 dark:border-gray-700 dark:shadow-gray-200 bg-white dark:text-black  p-4 shadow-2xl sm:p-6 lg:p-6 lg:max-h-[90vh]"
-          action=""
-        >
-          <h1 className="text-2xl font-extrabold sm:text-3xl">
-            Create an Account
-          </h1>
-          <p className="mt-2 text-base font-bold sm:text-xl">
-            Enter your details below to create your account
-          </p>
-
-          {/* name */}
-          <div className="mt-4 flex flex-col gap-4 sm:flex-row">
-            <div className="w-full sm:w-1/2">
-              <label
-                className="mb-2 block text-lg font-semibold sm:text-xl"
-                htmlFor=""
-              >
-                First Name
-              </label>
-              <input
-                type="text"
-                name="firstName"
-                value={user.firstName}
-                onChange={handleChange}
-                className="h-12 w-full rounded-2xl border-gray-800 pl-3 text-base dark:shadow-gray-900 border-2 shadow-2xl sm:h-14 sm:text-xl"
-                placeholder="First Name"
+      {/* Right Column: Signup Form */}
+      <div className="flex min-h-0 items-center justify-center overflow-hidden px-4 py-3 max-[700px]:py-1 sm:px-6 sm:py-5 lg:px-10 lg:py-8">
+        <div className="w-full max-w-md space-y-4 rounded-3xl border border-border/70 bg-card/70 p-5 shadow-xl shadow-black/5 max-[700px]:space-y-3 max-[700px]:p-3 sm:space-y-5 sm:p-7">
+          {/* Header */}
+          <div className="space-y-2 text-center max-[700px]:space-y-1 lg:text-left">
+            <div className="mb-3 flex items-center justify-center gap-2.5 max-[700px]:mb-1 lg:justify-start">
+              <img
+                src={logo}
+                alt="DevPulse Logo"
+                className="size-8 object-contain dark:invert"
               />
+              <span className="font-extrabold text-lg tracking-tight">
+                DevPulse
+              </span>
             </div>
-            <div className="w-full sm:w-1/2">
-              <label
-                className="mb-2 block text-lg font-semibold sm:text-xl"
-                htmlFor=""
-              >
-                Last Name
-              </label>
-              <input
-                className="h-12 w-full rounded-2xl border-gray-800 pl-3 text-base dark:shadow-gray-900 border-2 shadow-2xl sm:h-14 sm:text-xl"
-                type="text"
-                value={user.lastName}
-                name="lastName"
-                onChange={handleChange}
-                placeholder="Last Name"
-              />
-            </div>
+            <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+              Create an account
+            </h1>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              Enter your details below to get started for free.
+            </p>
           </div>
-          {/* email and passwords */}
-          <div className="mt-4 flex flex-col gap-4">
-            <div>
-              <label className="mb-2 block text-lg sm:text-2xl" htmlFor="">
-                Email
-              </label>
-              <input
-                type="text"
-                name="email"
-                onChange={handleChange}
-                value={user.email}
-                className="h-12 w-full rounded-2xl border-gray-800 dark:shadow-gray-900 border-2 pl-3 text-base shadow-2xl sm:h-14 sm:text-xl"
-                placeholder="johndoe@example.com"
-              />
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-3 max-[700px]:space-y-2">
+            {/* First & Last Name */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5 max-[700px]:space-y-1">
+                <Label className="text-xs font-semibold">First Name</Label>
+                <div className="relative">
+                  <User className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={user.firstName}
+                    onChange={handleChange}
+                    placeholder="Alex"
+                    required
+                    className="h-10 w-full rounded-xl border border-border bg-background/80 pl-9 pr-3 text-sm text-foreground transition focus:outline-none focus:ring-2 focus:ring-primary/40 max-[700px]:h-9"
+                  />
+                </div>
+              </div>
+              <div className="space-y-1.5 max-[700px]:space-y-1">
+                <Label className="text-xs font-semibold">Last Name</Label>
+                <input
+                  type="text"
+                  name="lastName"
+                  value={user.lastName}
+                  onChange={handleChange}
+                  placeholder="Morgan"
+                  required
+                  className="h-10 w-full rounded-xl border border-border bg-background/80 px-3 text-sm text-foreground transition focus:outline-none focus:ring-2 focus:ring-primary/40 max-[700px]:h-9"
+                />
+              </div>
             </div>
-            <div>
-              <label htmlFor="" className="mb-2 block text-lg sm:text-2xl">
-                Password
-              </label>
-              <div className="relative w-full">
+
+            {/* Email Field */}
+            <div className="space-y-1.5 max-[700px]:space-y-1">
+              <Label className="text-xs font-semibold">Email Address</Label>
+              <div className="relative">
+                <Mail className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  type="email"
+                  name="email"
+                  value={user.email}
+                  onChange={handleChange}
+                  placeholder="you@domain.com"
+                  required
+                  className="h-10 w-full rounded-xl border border-border bg-background/80 pl-9 pr-3 text-sm text-foreground transition focus:outline-none focus:ring-2 focus:ring-primary/40 max-[700px]:h-9"
+                />
+              </div>
+            </div>
+
+            {/* Password Field */}
+            <div className="space-y-1.5 max-[700px]:space-y-1">
+              <Label className="text-xs font-semibold">Password</Label>
+              <div className="relative">
+                <Lock className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
                   type={showPassword ? "text" : "password"}
-                  className="h-12 w-full rounded-2xl border-gray-800 pl-3 pr-12 text-base dark:shadow-gray-900 border-2 shadow-2xl sm:h-14 sm:text-xl"
-                  value={user.password}
                   name="password"
+                  value={user.password}
                   onChange={handleChange}
-                  placeholder="Password..."
+                  placeholder="At least 6 characters..."
+                  required
+                  className="h-10 w-full rounded-xl border border-border bg-background/80 pl-9 pr-10 text-sm text-foreground transition focus:outline-none focus:ring-2 focus:ring-primary/40 max-[700px]:h-9"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600 hover:text-black"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
+                  tabIndex={-1}
                 >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  {showPassword ? (
+                    <EyeOff className="size-4" />
+                  ) : (
+                    <Eye className="size-4" />
+                  )}
                 </button>
               </div>
             </div>
-          </div>
-          <button className="mt-8 flex h-12 w-full items-center justify-center rounded-2xl bg-black text-xl font-bold text-white shadow-md transition cursor-pointer hover:bg-gray-600 sm:h-14 sm:text-2xl">
-            Sign Up
-          </button>
-          <p className="mt-3 text-center text-sm sm:text-base">
+
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              disabled={loading}
+              className="mt-1 h-10 w-full gap-2 rounded-xl font-semibold shadow-xs max-[700px]:h-9"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  <span>Creating Account...</span>
+                </>
+              ) : (
+                <span>Get Started</span>
+              )}
+            </Button>
+          </form>
+
+          {/* Footer note */}
+          <p className="pt-1 text-center text-xs text-muted-foreground">
             Already have an account?{" "}
-            <Link to={"/login"}>
-              <span className="cursor-pointer underline dark:text-black  text-gray-500">
-                Sign in
-              </span>
+            <Link
+              to="/login"
+              className="font-semibold text-primary hover:underline"
+            >
+              Log in instead
             </Link>
           </p>
-        </form>
+        </div>
       </div>
     </div>
   );
