@@ -94,7 +94,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
       {/* Featured / Recent Stories Section */}
       {featuredBlogs.length > 0 && (
         <section className="py-14 md:py-20">
