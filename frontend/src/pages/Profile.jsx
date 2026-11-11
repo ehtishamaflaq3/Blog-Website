@@ -165,6 +165,7 @@ const Profile = () => {
       <Card className="overflow-hidden border border-border/80 shadow-xs bg-card">
         {/* Cover Accent Banner */}
         <div className="h-23 sm:h-28 w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 relative">
+          <img src="https://images.pexels.com/photos/26873010/pexels-photo-26873010.jpeg" alt="error" className="h-23 sm:h-28 w-full" srcset="" />
           <div className="absolute top-6 right-4 inline-flex items-center gap-1.5 px-2 rounded-full text-xs font-semibold bg-white/20 text-white backdrop-blur-md">
             <ShieldCheck className="size-3.5" />
             <span>Verified Author</span>
