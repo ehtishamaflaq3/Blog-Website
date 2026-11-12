@@ -1,7 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import heroimg from "../assets/blog2.png";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BookOpen, Sparkles, TrendingUp, Users, PenTool } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpen,
+  Sparkles,
+  TrendingUp,
+  Users,
+  PenTool,
+} from "lucide-react";
 
 const Herosection = () => {
   const navigate = useNavigate();
@@ -17,7 +24,7 @@ const Herosection = () => {
             {/* Main Headline */}
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-[1.18]">
               Where passionate minds share{" "}
-              <span className="bg-linear-to-r from-blue-500 via-indigo-800 to-purple-900 bg-clip-text text-transparent">
+              <span className="bg-black text-white dark:bg-white dark:text-black px-1 py-1 rounded-md transition-colors duration-300">
                 cutting-edge
               </span>{" "}
               stories.
@@ -37,7 +44,7 @@ const Herosection = () => {
                 onClick={() => navigate("/blogs")}
                 className="h-13 px-5 gap-3 text-xs sm:text-sm font-semibold shadow-md shadow-primary/20"
               >
-                <BookOpen className="size-4" />
+                {/* <BookOpen className="size-4" /> */}
                 <span>Explore Articles</span>
                 <ArrowRight className="size-4" />
               </Button>
@@ -48,8 +55,9 @@ const Herosection = () => {
                 onClick={() => navigate("/dashboard/create-blog")}
                 className="h-13 px-5 gap-4 text-xs sm:text-sm font-semibold hover:border-primary/50"
               >
-                <PenTool className="size-4 text-primary" />
+                {/* <PenTool className="size-4 text-primary" /> */}
                 <span>Start Writing</span>
+                <ArrowRight className="size-4" />
               </Button>
             </div>
           </div>
