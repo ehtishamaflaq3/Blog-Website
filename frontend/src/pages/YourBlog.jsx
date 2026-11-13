@@ -181,7 +181,6 @@ const YourBlog = () => {
                 <TableRow>
                   <TableCell colSpan={4} className="h-32 text-center text-sm text-muted-foreground">
                     <div className="flex items-center justify-center gap-2">
-                      <Sparkles className="size-4 animate-spin text-primary" />
                       Loading your library...
                     </div>
                   </TableCell>
@@ -229,7 +228,7 @@ const YourBlog = () => {
                         {item.thumbnail ? (
                           <img
                             src={item.thumbnail}
-                            alt=""
+                            alt="no pic"
                             className="size-12 rounded-lg object-cover shrink-0 border border-border"
                           />
                         ) : (
