@@ -19,9 +19,9 @@ import {
 const categories = [
   { name: "Web Development", icon: Code2, count: "120+ posts" },
   { name: "Digital Marketing", icon: Zap, count: "80+ posts" },
-  { name: "Blogging & Writing", icon: Feather, count: "65+ posts" },
-  { name: "Photography & Media", icon: Layers, count: "45+ posts" },
-  { name: "Cooking & Lifestyle", icon: Compass, count: "30+ posts" },
+  { name: "Blogging", icon: Feather, count: "65+ posts" },
+  { name: "Photography", icon: Layers, count: "45+ posts" },
+  { name: "Cooking", icon: Compass, count: "30+ posts" },
 ];
 
 const Home = () => {
@@ -48,46 +48,49 @@ const Home = () => {
       {/* Hero Section */}
       <Herosection />
       {/* Popular Categories Bar */}
-      <section className="border-y border-border/60 bg-muted/20 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
-            <div>
-              <h2 className="text-xl font-bold tracking-tight text-foreground">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+            <div className="pl-7 pt-2">
+              <h2 className="text-3xl font-extrabold tracking-tight text-foreground">
                 Popular Categories
               </h2>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Browse our curated selection of top knowledge tracks
               </p>
             </div>
+            <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate("/blogs")}
+                className="w-fit gap-1 mr-20 text-xs"
+              >
             <Link
               to="/blogs"
               className="text-xs font-semibold text-primary hover:underline inline-flex items-center gap-1"
-            >
+              >
               <span>Explore all</span>
               <ArrowRight className="size-3" />
             </Link>
+            </Button>
           </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+      <section className="border-y border-border/60 bg-muted/20 py-8">
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
             {categories.map((cat) => {
-              const Icon = cat.icon;
               return (
                 <div
                   key={cat.name}
                   onClick={() =>
                     navigate(`/blogs?category=${encodeURIComponent(cat.name)}`)
                   }
-                  className="group flex flex-col p-4 rounded-xl border border-border/70 bg-card hover:border-primary/50 hover:shadow-md transition-all duration-200 cursor-pointer"
+                  className="group flex flex-col p-3 rounded-xl border items-center justify-center border-border/70 bg-card hover:border-primary/50 hover:shadow-md transition-all duration-200 cursor-pointer"
                 >
-                  <div className="size-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                    <Icon className="size-4" />
-                  </div>
-                  <span className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors truncate">
+                  <span className="font-semibold text-xl text-foreground group-hover:text-primary transition-colors truncate">
                     {cat.name}
                   </span>
-                  <span className="text-[11px] text-muted-foreground pt-0.5">
+                  {/* <span className="text-[11px] text-muted-foreground pt-0.5">
                     {cat.count}
-                  </span>
+                  </span> */}
                 </div>
               );
             })}
@@ -96,9 +99,9 @@ const Home = () => {
       </section>
       {/* Featured / Recent Stories Section */}
       {featuredBlogs.length > 0 && (
-        <section className="py-14 md:py-20">
+        <section className="py-6 md:py-2">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-4">
               <div>
                 <h2 className="text-3xl font-extrabold tracking-tight text-foreground">
                   Featured Stories
@@ -117,7 +120,7 @@ const Home = () => {
                 <ArrowRight className="size-3.5" />
               </Button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 border-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {featuredBlogs.map((item) => (
                 <div
                   key={item._id}
