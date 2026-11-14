@@ -31,6 +31,25 @@ import {
 } from "lucide-react";
 import { FaFacebook, FaGithub, FaInstagram, FaLinkedin } from "react-icons/fa";
 
+const normalizeSocialUrl = (value) => {
+  const trimmedValue = value.trim();
+  if (!trimmedValue) return "";
+
+  const urlValue = /^https?:\/\//i.test(trimmedValue)
+    ? trimmedValue
+    : `https://${trimmedValue.replace(/^\/\//, "")}`;
+
+  try {
+    const url = new URL(urlValue);
+    if (!["http:", "https:"].includes(url.protocol) || !url.hostname.includes(".")) {
+      return null;
+    }
+    return url.href;
+  } catch {
+    return null;
+  }
+};
+
 const Profile = () => {
   const { user, loading } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
@@ -86,15 +105,29 @@ const Profile = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    const socialLinks = ["github", "linkedin", "instagram", "facebook"];
+    const normalizedLinks = {};
+    for (const social of socialLinks) {
+      const normalizedUrl = normalizeSocialUrl(input[social]);
+      if (normalizedUrl === null) {
+        toast.add({
+          title: `Invalid ${social} URL`,
+          description: `Enter a valid ${social} link, with or without https://.`,
+          type: "error",
+        });
+        return;
+      }
+      normalizedLinks[social] = normalizedUrl;
+    }
+
     const formData = new FormData();
     formData.append("firstName", input.firstName);
     formData.append("lastName", input.lastName);
     formData.append("bio", input.bio);
     formData.append("occupation", input.occupation);
-    formData.append("facebook", input.facebook);
-    formData.append("linkedin", input.linkedin);
-    formData.append("instagram", input.instagram);
-    formData.append("github", input.github);
+    socialLinks.forEach((social) => {
+      formData.append(social, normalizedLinks[social]);
+    });
     if (input.file) {
       formData.append("file", input.file);
     }
@@ -303,35 +336,75 @@ const Profile = () => {
                     </Label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <input
-                        type="url"
+                        type="text"
+                        inputMode="url"
                         name="github"
                         value={input.github}
                         onChange={changeEventHandler}
-                        placeholder="GitHub URL"
+                        onBlur={() => {
+                          const normalizedUrl = normalizeSocialUrl(input.github);
+                          if (normalizedUrl) {
+                            setInput((prev) => ({
+                              ...prev,
+                              github: normalizedUrl,
+                            }));
+                          }
+                        }}
+                        placeholder="github.com/username"
                         className="w-full h-8 px-2.5 rounded-lg border border-border bg-background text-xs"
                       />
                       <input
-                        type="url"
+                        type="text"
+                        inputMode="url"
                         name="linkedin"
                         value={input.linkedin}
                         onChange={changeEventHandler}
-                        placeholder="LinkedIn URL"
+                        onBlur={() => {
+                          const normalizedUrl = normalizeSocialUrl(input.linkedin);
+                          if (normalizedUrl) {
+                            setInput((prev) => ({
+                              ...prev,
+                              linkedin: normalizedUrl,
+                            }));
+                          }
+                        }}
+                        placeholder="linkedin.com/in/your-name"
                         className="w-full h-8 px-2.5 rounded-lg border border-border bg-background text-xs"
                       />
                       <input
-                        type="url"
+                        type="text"
+                        inputMode="url"
                         name="instagram"
                         value={input.instagram}
                         onChange={changeEventHandler}
-                        placeholder="Instagram URL"
+                        onBlur={() => {
+                          const normalizedUrl = normalizeSocialUrl(input.instagram);
+                          if (normalizedUrl) {
+                            setInput((prev) => ({
+                              ...prev,
+                              instagram: normalizedUrl,
+                            }));
+                          }
+                        }}
+                        placeholder="instagram.com/username"
                         className="w-full h-8 px-2.5 rounded-lg border border-border bg-background text-xs"
                       />
                       <input
-                        type="url"
+                        type="text"
+                        inputMode="url"
                         name="facebook"
                         value={input.facebook}
                         onChange={changeEventHandler}
-                        placeholder="Facebook URL"
+                        onBlur={() => {
+                          const normalizedUrl = normalizeSocialUrl(input.facebook);
+                          if (normalizedUrl) {
+                            setInput((prev) => ({
+                              ...prev,
+                              facebook: normalizedUrl,
+                            }));
+                          }
+                        }}
+                        placeholder="facebook.com/username"
                         className="w-full h-8 px-2.5 rounded-lg border border-border bg-background text-xs"
                       />
                     </div>
