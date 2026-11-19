@@ -1,8 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useParams, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import JodeEditor from "jodit-react";
+import { setBlog, setLoading } from "@/pages/redux/blogSlice";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import JodeEditor from "jodit-react";
 import {
   Select,
   SelectContent,
@@ -12,12 +16,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { setBlog, setLoading } from "@/pages/redux/blogSlice";
-import axios from "axios";
-import { Loader2 } from "lucide-react";
 import { toast } from "@/components/ui/toast";
+import {
+  ArrowLeft,
+  Eye,
+  ImageIcon,
+  Loader2,
+  Save,
+  Sparkles,
+  Upload,
+} from "lucide-react";
 
 const items = [
   { label: "Web Development", value: "Web Development" },
@@ -31,23 +39,31 @@ const UpdateBlog = () => {
   const editor = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  // taking id of the blog
   const params = useParams();
   const id = params.blogId;
 
-  // Load the selected blog from the API so editing also works after a refresh.
   const { blog, loading } = useSelector((store) => store.blog);
+  const { theme } = useSelector((store) => store.theme);
   const [selectBlog, setSelectBlog] = useState(null);
   const [loadError, setLoadError] = useState("");
   const [content, setContent] = useState("");
   const [blogData, setBlogData] = useState({
     title: "",
     subtitle: "",
-    description: "",
     category: "",
   });
   const [previewThumbnail, setPreviewThumbnail] = useState("");
+  const [thumbnailFile, setThumbnailFile] = useState(null);
+  const editorConfig = useMemo(
+    () => ({
+      theme: theme === "dark" ? "dark" : "default",
+      style: {
+        color: theme === "dark" ? "#ffffff" : "#000000",
+        backgroundColor: theme === "dark" ? "#0f172a" : "#ffffff",
+      },
+    }),
+    [theme],
+  );
 
   useEffect(() => {
     let isMounted = true;
@@ -56,7 +72,7 @@ const UpdateBlog = () => {
       try {
         const res = await axios.get(
           `http://localhost:3000/api/v1/blog/${id}`,
-          { withCredentials: true, timeout: 15000 },
+          { withCredentials: true, timeout: 15000 }
         );
         if (!isMounted) return;
 
@@ -65,7 +81,6 @@ const UpdateBlog = () => {
         setBlogData({
           title: loadedBlog.title || "",
           subtitle: loadedBlog.subTitle || "",
-          description: loadedBlog.description || "",
           category: loadedBlog.category || "",
         });
         setContent(loadedBlog.description || "");
@@ -73,7 +88,7 @@ const UpdateBlog = () => {
       } catch (error) {
         if (isMounted) {
           setLoadError(
-            error.response?.data?.message || "Could not load this blog.",
+            error.response?.data?.message || "Could not load this blog."
           );
         }
       }
@@ -85,7 +100,6 @@ const UpdateBlog = () => {
     };
   }, [id]);
 
-  // set all change data in blog section
   const handleChange = (e) => {
     const { name, value } = e.target;
     setBlogData((prev) => ({
@@ -94,36 +108,20 @@ const UpdateBlog = () => {
     }));
   };
 
-  // selecting category
-  const selectCategory = (value) => {
-    setBlogData((previous) => ({ ...previous, category: value }));
-  };
-
-  // selecting thumbnail
   const selectThumbnail = (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      setBlogData((previous) => ({ ...previous, thumbnail: file }));
-      const fileReader = new FileReader();
-      fileReader.onloadend = () => setPreviewThumbnail(fileReader.result);
-      fileReader.readAsDataURL(file);
+      setThumbnailFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => setPreviewThumbnail(reader.result);
+      reader.readAsDataURL(file);
     }
   };
 
-  // toast of update
-  function showToast() {
-    toast.add({
-      title: "Blog Updated Successfully",
-      description: "",
-      type: "success",
-    });
-  }
-
-  //updating all blog data
   const updateBlogHandler = async () => {
     if (!blogData.title.trim() || !blogData.subtitle.trim() || !blogData.category) {
       toast.add({
-        title: "Complete all fields",
+        title: "Required fields missing",
         description: "Title, subtitle, and category are required.",
         type: "error",
       });
@@ -135,9 +133,10 @@ const UpdateBlog = () => {
     formData.append("subTitle", blogData.subtitle);
     formData.append("description", content);
     formData.append("category", blogData.category);
-    if (blogData.thumbnail instanceof File) {
-      formData.append("file", blogData.thumbnail);
+    if (thumbnailFile instanceof File) {
+      formData.append("file", thumbnailFile);
     }
+
     try {
       dispatch(setLoading(true));
       const res = await axios.put(
@@ -146,27 +145,31 @@ const UpdateBlog = () => {
         {
           headers: { "Content-Type": "multipart/form-data" },
           withCredentials: true,
-          timeout: 15000,
-        },
+          timeout: 20000,
+        }
       );
+
       if (res.data.success) {
         const existingBlogs = Array.isArray(blog) ? blog : [];
         dispatch(
           setBlog([
             ...existingBlogs.filter((item) => item._id !== id),
             res.data.blog,
-          ]),
+          ])
         );
         setSelectBlog(res.data.blog);
-        showToast();
-        navigate('/dashboard/your-blog');
+        toast.add({
+          title: "Story Updated!",
+          description: "Your changes have been saved successfully.",
+          type: "success",
+        });
+        navigate("/dashboard/your-blog");
       }
     } catch (error) {
       toast.add({
         title: "Could not update blog",
         description:
-          error.response?.data?.message ||
-          "Check that the backend server is running and try again.",
+          error.response?.data?.message || "Something went wrong while saving.",
         type: "error",
       });
     } finally {
@@ -175,131 +178,220 @@ const UpdateBlog = () => {
   };
 
   if (loadError) {
-    return <div className="p-6 text-red-500">{loadError}</div>;
+    return (
+      <div className="p-8 max-w-lg mx-auto text-center space-y-4">
+        <Card className="p-8 border-destructive/20 bg-destructive/5">
+          <p className="text-destructive font-semibold">{loadError}</p>
+          <Button
+            variant="outline"
+            onClick={() => navigate("/dashboard/your-blog")}
+            className="mt-4"
+          >
+            Back to Your Blogs
+          </Button>
+        </Card>
+      </div>
+    );
   }
+
   if (!selectBlog) {
-    return <div className="p-6">Loading blog...</div>;
+    return (
+      <div className="p-12 flex items-center justify-center gap-2 text-sm text-muted-foreground">
+        <Loader2 className="size-5 animate-spin text-primary" />
+        <span>Loading story editor...</span>
+      </div>
+    );
   }
 
   return (
-    <div className="md:pr-8 md:ml-[40px] pt-6">
-      <Card className="h-[calc(100vh-80px)] overflow-y-auto p-4 dark:bg-gray-800 ">
-        <h1 className="text-2xl font-bold">Basic Blog Information </h1>
-        <p className="text-xl">
-          Make changes to your blogs here. Click publish when you are done
-        </p>
-        {/* buttons */}
-        <div className="space-x-6">
-          <Button className="text-xl cursor-pointer h-12 w-35 font-bold">
-            Public
-          </Button>
+    <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-6xl">
+      {/* Sticky Top Header / Actions Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border/70">
+        <div className="flex items-center gap-3">
           <Button
-            variant="destructive"
-            className="cursor-pointer text-xl h-12 w-35 font-bold"
-          >
-            Remove Blog
-          </Button>
-        </div>
-        {/* input sections */}
-        <div className="space-y-2">
-          <Label className="text-xl">Title</Label>
-          <input
-            className="dark:border-gray-300 text-xl border-2 border-gray-500 rounded-xl h-12 w-85 p-2"
-            type="text"
-            name="title"
-            value={blogData.title}
-            onChange={handleChange}
-            placeholder="Enter a title"
-          />
-        </div>
-        <div className="space-y-3">
-          <Label className="text-xl">Subtitle</Label>
-          <input
-            type="text"
-            className="dark:border-gray-300 text-xl border-2 border-gray-500 rounded-xl h-12 w-85 p-2"
-            name="subtitle"
-            value={blogData.subtitle}
-            onChange={handleChange}
-            placeholder="Enter a subtitle"
-          />
-        </div>
-        {/* jodit editor */}
-        <div className="space-y-2">
-          <Label className="text-xl">Description</Label>
-          <JodeEditor
-            ref={editor}
-            className="jodit- toolbar"
-            value={content}
-            onChange={(newContent) => setContent(newContent)}
-          />
-        </div>
-        {/* categories */}
-        <div>
-          <Label className="text-xl mb-1">Category</Label>
-          <Select
-            onValueChange={selectCategory}
-            value={blogData?.category}
-            items={items}
-          >
-            <SelectTrigger className="w-full h-10 max-w-65 border-2 p-3 text-2xl">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel className="text-xl">Categories</SelectLabel>
-                {items.map((item) => (
-                  <SelectItem className="" key={item.value} value={item.value}>
-                    {item.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-        {/* thumbnail */}
-        <div className="space-y-1">
-          <Label className="text-xl ">Thumbnail</Label>
-          <input
-            type="file"
-            id="file"
-            onChange={selectThumbnail}
-            accept="image/*"
-            className="dark:border-gray-300 text-xl border-2 border-gray-500 rounded-xl h-12 w-85 p-2"
-          />
-          {previewThumbnail && (
-            <img
-              src={previewThumbnail}
-              alt="error"
-              className="w-90 h-70 my-2"
-            />
-          )}
-        </div>
-        {/* back and save */}
-        <div className="flex gap-5">
-          <Button
+            variant="ghost"
+            size="icon-sm"
             onClick={() => navigate(-1)}
-            className="w-45 p-3 text-2xl h-13"
-            variant="outline"
+            className="text-muted-foreground hover:text-foreground"
           >
-            Back
+            <ArrowLeft className="size-4" />
           </Button>
+          <div>
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground truncate max-w-md">
+              Editing: {blogData.title || "Untitled story"}
+            </h1>
+            <p className="text-xs text-muted-foreground">
+              Make changes below and hit save to publish updates.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2.5">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate(`/blogs/${id}`)}
+            className="gap-1.5 text-xs"
+          >
+            <Eye className="size-3.5" />
+            <span>Preview Live</span>
+          </Button>
+
           <Button
             disabled={loading}
             onClick={updateBlogHandler}
-            className="w-45 p-3 text-2xl h-13"
+            size="sm"
+            className="gap-1.5 text-xs font-semibold shadow-xs"
           >
             {loading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                please wait
+                <Loader2 className="size-3.5 animate-spin" />
+                <span>Saving...</span>
               </>
             ) : (
-              "Save"
+              <>
+                <Save className="size-3.5" />
+                <span>Save Changes</span>
+              </>
             )}
           </Button>
         </div>
-      </Card>
+      </div>
+
+      {/* Editor & Metadata Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Left Column: Title, Subtitle, & Rich Body */}
+        <div className="lg:col-span-8 space-y-6">
+          <Card className="p-5 sm:p-6 border border-border/80 bg-card space-y-5">
+            {/* Title Input */}
+            <div className="space-y-1.5">
+              <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Headline
+              </Label>
+              <input
+                type="text"
+                name="title"
+                value={blogData.title}
+                onChange={handleChange}
+                placeholder="Story headline..."
+                className="w-full text-lg sm:text-xl font-bold h-12 px-3 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/40"
+              />
+            </div>
+
+            {/* Subtitle Input */}
+            <div className="space-y-1.5">
+              <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Subtitle
+              </Label>
+              <input
+                type="text"
+                name="subtitle"
+                value={blogData.subtitle}
+                onChange={handleChange}
+                placeholder="Story summary or dek..."
+                className="w-full text-sm h-10 px-3 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/40 text-muted-foreground"
+              />
+            </div>
+
+            {/* Jodit Rich Text Editor */}
+            <div className="space-y-1.5 pt-2">
+              <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Article Body Content
+              </Label>
+              <div className="rounded-xl overflow-hidden border border-border">
+                <JodeEditor
+                  ref={editor}
+                  value={content}
+                  config={editorConfig}
+                  onChange={(newContent) => setContent(newContent)}
+                />
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Right Column: Sidebar Settings (Category & Thumbnail) */}
+        <div className="lg:col-span-4 space-y-6">
+          {/* Category Card */}
+          <Card className="p-5 border border-border/80 bg-card space-y-4">
+            <h3 className="text-sm font-bold text-foreground">
+              Topic & Track
+            </h3>
+            <div className="space-y-2">
+              <Label className="text-xs text-muted-foreground">Category</Label>
+              <Select
+                value={blogData.category}
+                onValueChange={(val) =>
+                  setBlogData((prev) => ({ ...prev, category: val }))
+                }
+              >
+                <SelectTrigger className="w-full h-10 border border-border bg-background text-xs sm:text-sm">
+                  <SelectValue placeholder="Choose category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel className="text-xs">Categories</SelectLabel>
+                    {items.map((item) => (
+                      <SelectItem key={item.value} value={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          </Card>
+
+          {/* Cover Thumbnail Card */}
+          <Card className="p-5 border border-border/80 bg-card space-y-4">
+            <h3 className="text-sm font-bold text-foreground">
+              Cover Thumbnail
+            </h3>
+
+            {previewThumbnail ? (
+              <div className="space-y-3">
+                <div className="overflow-hidden rounded-xl aspect-video border border-border/80 bg-muted">
+                  <img
+                    src={previewThumbnail}
+                    alt="Cover preview"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <label
+                  htmlFor="cover-upload"
+                  className="w-full h-9 rounded-lg border border-border bg-muted/40 hover:bg-muted text-xs font-medium flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
+                >
+                  <Upload className="size-3.5" />
+                  <span>Change Image</span>
+                </label>
+              </div>
+            ) : (
+              <label
+                htmlFor="cover-upload"
+                className="flex flex-col items-center justify-center aspect-video rounded-xl border-2 border-dashed border-border/80 bg-muted/20 hover:bg-muted/40 cursor-pointer transition-colors p-4 text-center space-y-2"
+              >
+                <ImageIcon className="size-8 text-muted-foreground" />
+                <span className="text-xs font-semibold text-foreground">
+                  Upload Cover Photo
+                </span>
+                <span className="text-[10px] text-muted-foreground">
+                  PNG, JPG, or WEBP up to 5MB
+                </span>
+              </label>
+            )}
+
+            <input
+              type="file"
+              id="cover-upload"
+              accept="image/*"
+              onChange={selectThumbnail}
+              className="hidden"
+            />
+          </Card>
+        </div>
+      </div>
     </div>
   );
 };
+
 export default UpdateBlog;
