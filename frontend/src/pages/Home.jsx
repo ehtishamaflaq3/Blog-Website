@@ -1,7 +1,10 @@
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Herosection from "../components/Herosection";
 import Footer from "../components/Footer";
+import { setBlog } from "./redux/blogSlice";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -26,10 +29,36 @@ const categories = [
 
 const Home = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { blog: blogsList } = useSelector((store) => store.blog);
 
+  useEffect(() => {
+    const controller = new AbortController();
+
+    axios
+      .get("http://localhost:3000/api/v1/blog/all-blogs", {
+        timeout: 15000,
+        signal: controller.signal,
+      })
+      .then((res) => {
+        if (!Array.isArray(res.data.blogs)) {
+          throw new Error("Invalid blogs response.");
+        }
+        dispatch(setBlog(res.data.blogs));
+      })
+      .catch((error) => {
+        if (!axios.isCancel(error)) {
+          console.error("FEATURED BLOGS ERROR:", error);
+        }
+      });
+
+    return () => controller.abort();
+  }, [dispatch]);
+
   // Take top 3-6 blogs for preview
-  const featuredBlogs = Array.isArray(blogsList) ? blogsList.slice(0, 3) : [];
+  const featuredBlogs = Array.isArray(blogsList)
+    ? blogsList.filter((blog) => blog.isPublished !== false).slice(0, 3)
+    : [];
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "Recently published";
@@ -73,7 +102,7 @@ const Home = () => {
             </Button>
           </div>
       <section className="border-y border-border/60 bg-muted/20 py-8">
-        
+        {/* all categories */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
             {categories.map((cat) => {
