@@ -274,7 +274,7 @@ const Profile = () => {
                         className="hidden"
                       />
                       <p className="text-[10px] text-muted-foreground pt-1">
-                        JPG, PNG, or WEBP under 3MB
+                        JPG, PNG, or WEBP under 5MB
                       </p>
                     </div>
                   </div>
