@@ -1,4 +1,6 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 import express from "express";
 import app from "./src/app.js";
 import connectDb from "./src/db/db.js";
@@ -7,7 +9,9 @@ import blogRouter from "./src/routes/blog.route.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import commentRouter from "./src/routes/comment.route.js";
-import path from "path";
+
+const backendDirectory = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(backendDirectory, ".env") });
 
 // default middlewares
 app.use(express.json());
@@ -28,7 +32,8 @@ app.use("/api/v1/blog", blogRouter);
 // for comment functioning
 app.use("/api/v1/comment", commentRouter);
 app.use(express.static(path.join(_dirname, "/frontend/dist")));
-app.get("*", (_, res) => {
+
+app.use((_, res) => {
   res.sendFile(path.resolve(_dirname, "frontend", "dist", "index.html"));
 });
 // databse conection

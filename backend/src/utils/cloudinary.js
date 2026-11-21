@@ -1,5 +1,13 @@
-import { v2 as cloudinary } from 'cloudinary';
-import dotenv from 'dotenv/config'
+import { v2 as cloudinary } from "cloudinary";
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const backendDirectory = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../.."
+);
+dotenv.config({ path: path.join(backendDirectory, ".env") });
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME || process.env.Cloud_Name,
