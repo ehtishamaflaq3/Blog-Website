@@ -14,7 +14,7 @@ const Herosection = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative overflow-hidden py-8 md:py-12 lg:py-5">
+    <section className="relative overflow-hidden py-8 md:py-12 lg:py-5 border-b">
       {/* Subtle ambient gradient glow in the background */}
       <div className="absolute left-1/2 w-112.5 h-75 bg-primary/10 rounded-full blur-3xl pointer-events-none -z-10" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

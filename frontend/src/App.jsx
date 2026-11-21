@@ -1,4 +1,3 @@
-import React from "react";
 import Home from "./pages/Home";
 import Blogs from "./pages/Blogs";
 import About from "./pages/About";
@@ -13,104 +12,111 @@ import Comments from "./pages/Comments";
 import CreateBlog from "./pages/CreateBlog";
 import UpdateBlog from "./pages/UpdateBlog";
 import BlogsView from "./pages/BlogsView";
+import ScrollToTop from "./components/ScrollToTop";
+
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: (
-      <>
-        <Navbar />
-        <Home />
-      </>
-    ),
-  },
-  {
-    path: "/blogs",
-    element: (
-      <>
-        <Navbar />
-        <Blogs />
-      </>
-    ),
-  },
-  {
-    path:"/blogs/:blogId",
-    element:(
-      <>
-      <Navbar/>
-      <BlogsView/>
-      </>
-    )
-  },
-  {
-    path: "/about",
-    element: (
-      <>
-        <Navbar />
-        <About />
-      </>
-    ),
-  },
-  {
-    path: "/dashboard",
-    element: (
-      <>
-        <Navbar />
-        <Dashboard />
-      </>
-    ),
+    element: <ScrollToTop />,
     children: [
       {
-        path: "profile",
-        element: <Profile />,
+        path: "/",
+        element: (
+          <div className="min-h-screen bg-background text-foreground flex flex-col">
+            <Navbar />
+            <Home />
+          </div>
+        ),
       },
       {
-        path: "your-blog",
-        element: <YourBlog />,
+        path: "/blogs",
+        element: (
+          <div className="min-h-screen bg-background text-foreground flex flex-col">
+            <Navbar />
+            <Blogs />
+          </div>
+        ),
       },
       {
-        path: "comments",
-        element: <Comments />,
+        path: "/blogs/:blogId",
+        element: (
+          <div className="min-h-screen bg-background text-foreground flex flex-col">
+            <Navbar />
+            <BlogsView />
+          </div>
+        ),
       },
       {
-        path: "create-blog",
-        element: <CreateBlog />,
+        path: "/about",
+        element: (
+          <div className="min-h-screen bg-background text-foreground flex flex-col">
+            <Navbar />
+            <About />
+          </div>
+        ),
       },
       {
-        path: "create-blog/:blogId",
-        element: <UpdateBlog />,
+        path: "/dashboard",
+        element: (
+          <div className="min-h-screen bg-background text-foreground flex flex-col">
+            <Navbar />
+            <Dashboard />
+          </div>
+        ),
+        children: [
+          {
+            path: "profile",
+            element: <Profile />,
+          },
+          {
+            path: "your-blog",
+            element: <YourBlog />,
+          },
+          {
+            path: "comments",
+            element: <Comments />,
+          },
+          {
+            path: "create-blog",
+            element: <CreateBlog />,
+          },
+          {
+            path: "create-blog/:blogId",
+            element: <UpdateBlog />,
+          },
+        ],
+      },
+      {
+        path: "/login",
+        element: (
+          <div className="flex h-dvh flex-col overflow-hidden bg-background text-foreground">
+            <div className="shrink-0">
+              <Navbar />
+            </div>
+            <div className="min-h-0 flex-1">
+              <Login />
+            </div>
+          </div>
+        ),
+      },
+      {
+        path: "/signup",
+        element: (
+          <div className="flex h-dvh flex-col overflow-hidden bg-background text-foreground">
+            <div className="shrink-0">
+              <Navbar />
+            </div>
+            <div className="min-h-0 flex-1">
+              <Signup />
+            </div>
+          </div>
+        ),
       },
     ],
-  },
-  {
-    path: "/login",
-    element: (
-      <div className="min-h-screen lg:h-screen lg:overflow-hidden">
-        <Navbar />
-        <div className="lg:h-[calc(100vh-4.25rem)] lg:overflow-hidden">
-          <Login />
-        </div>
-      </div>
-    ),
-  },
-  {
-    path: "/signup",
-    element: (
-      <div className="min-h-screen lg:h-screen lg:overflow-hidden">
-        <Navbar />
-        <div className="lg:h-[calc(100vh-4.25rem)] lg:overflow-hidden">
-          <Signup />
-        </div>
-      </div>
-    ),
   },
 ]);
 
 const App = () => {
-  return (
-    <>
-      <RouterProvider router={router} />
-    </>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { setBlog } from "./redux/blogSlice";
@@ -9,10 +9,8 @@ import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Calendar,
-  Clock,
   Filter,
   Search,
-  Sparkles,
   X,
   BookOpen,
 } from "lucide-react";
@@ -31,10 +29,8 @@ const Blogs = () => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { blog: blogsList, loading: reduxLoading } = useSelector(
-    (store) => store.blog
-  );
-
+  const [blogs, setBlogs] = useState([]);
+  const [loadError, setLoadError] = useState("");
   const [searchTerm, setSearchTerm] = useState(
     searchParams.get("search") || ""
   );
@@ -42,7 +38,7 @@ const Blogs = () => {
     searchParams.get("category") || "All"
   );
   const [sortBy, setSortBy] = useState("latest");
-  const [fetching, setFetching] = useState(!blogsList?.length);
+  const [fetching, setFetching] = useState(true);
 
   // Sync search input if URL changes
   useEffect(() => {
@@ -52,52 +48,54 @@ const Blogs = () => {
     if (c !== null) setSelectedCategory(c);
   }, [searchParams]);
 
-  // Load blogs if redux store doesn't have them yet
+  // Always load the public feed, not the current user's private blog list.
   useEffect(() => {
     let isMounted = true;
-    if (!blogsList || blogsList.length === 0) {
-      setFetching(true);
-      axios
-        .get("http://localhost:3000/api/v1/blog/your-blog", {
-          withCredentials: true,
-          timeout: 15000,
-        })
-        .then((res) => {
-          if (isMounted) {
-            const list = res.data.blogs ?? res.data.blog ?? [];
-            if (Array.isArray(list)) {
-              dispatch(setBlog(list));
-            }
-          }
-        })
-        .catch(() => {})
-        .finally(() => {
-          if (isMounted) setFetching(false);
-        });
-    } else {
-      setFetching(false);
-    }
+    axios
+      .get("/blog/all-blogs", {
+        timeout: 15000,
+      })
+      .then((res) => {
+        const list = res.data.blogs;
+        if (!Array.isArray(list)) {
+          throw new Error("Invalid blogs response.");
+        }
+        if (isMounted) {
+          setBlogs(list);
+          setLoadError("");
+          dispatch(setBlog(list));
+        }
+      })
+      .catch((error) => {
+        if (isMounted) {
+          setLoadError(
+            error.response?.data?.message || "Could not load articles.",
+          );
+        }
+      })
+      .finally(() => {
+        if (isMounted) setFetching(false);
+      });
+
     return () => {
       isMounted = false;
     };
-  }, [blogsList, dispatch]);
+  }, [dispatch]);
 
   // Filter & Sort blogs
   const filteredBlogs = useMemo(() => {
-    const list = Array.isArray(blogsList) ? blogsList : [];
+    const list = Array.isArray(blogs) ? blogs : [];
     return list
       .filter((item) => {
         const matchesCategory =
           selectedCategory === "All" ||
           (item.category &&
             item.category.toLowerCase() === selectedCategory.toLowerCase());
-
         const matchesSearch =
           !searchTerm.trim() ||
           item.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           item.subTitle?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           item.category?.toLowerCase().includes(searchTerm.toLowerCase());
-
         return matchesCategory && matchesSearch;
       })
       .sort((a, b) => {
@@ -106,7 +104,7 @@ const Blogs = () => {
         }
         return new Date(a.createdAt || 0) - new Date(b.createdAt || 0);
       });
-  }, [blogsList, selectedCategory, searchTerm, sortBy]);
+  }, [blogs, selectedCategory, searchTerm, sortBy]);
 
   const handleCategoryClick = (cat) => {
     setSelectedCategory(cat);
@@ -139,7 +137,7 @@ const Blogs = () => {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col transition-colors">
       {/* Page Header */}
-      <div className="border-b border-border/70 bg-muted/20 py-8 md:py-8">
+      <div className="border-b border-border/70 bg-muted/20 py-4 md:py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">
             Stories & Insights for Builders
@@ -192,7 +190,8 @@ const Blogs = () => {
                       : "bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted"
                   }`}
                 >
-                  {cat}
+                  {cat} 
+                  {/* <span>{" "}{filteredBlogs.length}</span> */}
                 </button>
               );
             })}
@@ -246,7 +245,16 @@ const Blogs = () => {
         )}
 
         {/* Empty State */}
-        {!fetching && filteredBlogs.length === 0 && (
+        {!fetching && loadError && (
+          <Card className="p-8 text-center border border-destructive/30 bg-destructive/5 max-w-lg mx-auto">
+            <h3 className="text-lg font-bold text-foreground mb-1">
+              Could not load articles
+            </h3>
+            <p className="text-sm text-muted-foreground">{loadError}</p>
+          </Card>
+        )}
+
+        {!fetching && !loadError && filteredBlogs.length === 0 && (
           <Card className="p-12 text-center border-dashed border-2 bg-muted/20 max-w-lg mx-auto">
             <div className="size-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-3">
               <BookOpen className="size-6" />
@@ -326,7 +334,7 @@ const Blogs = () => {
                           {authorName[0] || "A"}
                         </AvatarFallback>
                       </Avatar>
-                      <span className="font-medium text-foreground truncate max-w-[120px]">
+                      <span className="font-medium text-foreground truncate max-w-30">
                         {authorName}
                       </span>
                     </div>

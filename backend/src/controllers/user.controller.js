@@ -5,6 +5,8 @@ import "dotenv/config";
 import cloudinary from "../utils/cloudinary.js";
 import getDataUri from "../utils/datauri.js";
 
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 // export const register = async (req, res) => {
 //   try {
 //     console.log("🔥 REQ BODY:", req.body);
@@ -27,32 +29,44 @@ import getDataUri from "../utils/datauri.js";
 // user registration
 export const register = async (req, res) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
-    if (!firstName || !lastName || !email || !password) {
+    const { firstName, lastName, email, password } = req.body ?? {};
+    if (
+      typeof firstName !== "string" ||
+      typeof lastName !== "string" ||
+      typeof email !== "string" ||
+      typeof password !== "string" ||
+      !firstName.trim() ||
+      !lastName.trim() ||
+      !email.trim() ||
+      !password
+    ) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
       });
     }
+    const normalizedEmail = email.trim().toLowerCase();
     //    email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(normalizedEmail)) {
       return res.status(400).json({
         success: false,
         message: "Invalid email",
       });
     }
     //    password validation
-    if (password.length < 6) {
+    if (password.length < 6 || Buffer.byteLength(password, "utf8") > 72) {
       return res.status(400).json({
         success: false,
-        message: "Password must be atleast 6",
+        message: "Password must be between 6 and 72 bytes",
       });
     }
     // check user is already or not
-    const existingUserbyemail = await userCollection.findOne({ email: email });
+    const existingUserbyemail = await userCollection.findOne({
+      email: new RegExp(`^${escapeRegex(normalizedEmail)}$`, "i"),
+    });
     if (existingUserbyemail) {
-      return res.status(400).json({
+      return res.status(409).json({
         success: false,
         message: "Please change email this email is already exist",
       });
@@ -61,18 +75,26 @@ export const register = async (req, res) => {
     const hashPassword = await bcrypt.hash(password, 5);
     // create or register user in database
     const newUser = await userCollection.create({
-      firstName,
-      lastName,
-      email,
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      email: normalizedEmail,
       password: hashPassword,
     });
+    const user = newUser.toObject();
+    delete user.password;
     return res.status(201).json({
       success: true,
       message: "Account Created Succesfully",
-      newUser: newUser,
+      newUser: user,
     });
   } catch (error) {
     console.log("REGISTER ERROR:", error);
+    if (error.code === 11000) {
+      return res.status(409).json({
+        success: false,
+        message: "An account with this email already exists.",
+      });
+    }
     return res.status(500).json({
       success: false,
       message: error.message,
@@ -84,16 +106,24 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body ?? {};
     // checking anything is missing
-    if (!email || !password) {
+    if (
+      typeof email !== "string" ||
+      typeof password !== "string" ||
+      !email.trim() ||
+      !password
+    ) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
       });
     }
     // checking ser is exist or not
-    let user = await userCollection.findOne({ email });
+    const normalizedEmail = email.trim().toLowerCase();
+    let user = await userCollection.findOne({
+      email: new RegExp(`^${escapeRegex(normalizedEmail)}$`, "i"),
+    });
     if (!user) {
       return res.status(400).json({
         success: false,
@@ -109,26 +139,34 @@ export const login = async (req, res) => {
       });
     }
     // creating tokens
-    const token = jwt.sign({ userId: user._id }, process.env.Secret_Key, {
-      expiresIn: "1d",
-    });
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET || process.env.Secret_Key,
+      {
+        expiresIn: "1d",
+      }
+    );
+    const safeUser = user.toObject();
+    delete safeUser.password;
+    const cookieOptions = {
+      maxAge: 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    };
     return res
       .status(200)
-      .cookie("token", token, {
-        maxAge: 1 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
-        sameSite: "strict",
-      })
+      .cookie("token", token, cookieOptions)
       .json({
         success: true,
         message: `Wellcome Back ${user.firstName}`,
-        user,
+        user: safeUser,
       });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "Failed to register",
+      message: "Failed to log in",
     });
   }
 };
@@ -136,10 +174,17 @@ export const login = async (req, res) => {
 // user logout
 
 export const logout = async (_, res) => {
-  return res.status(200).cookie("token", "", { maxAge: 0 }).json({
-    success: true,
-    message: "Logout Successfully",
-  });
+  return res
+    .status(200)
+    .clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    })
+    .json({
+      success: true,
+      message: "Logout Successfully",
+    });
 };
 
 // user edit profile
@@ -155,8 +200,35 @@ export const updateProfile = async (req, res) => {
       github,
       occupation,
       bio,
-    } = req.body;
+    } = req.body ?? {};
     const file = req.file;
+    for (const [field, value] of Object.entries({
+      firstName,
+      lastName,
+      facebook,
+      instagram,
+      linkedin,
+      github,
+      occupation,
+      bio,
+    })) {
+      if (value !== undefined && typeof value !== "string") {
+        return res.status(400).json({
+          success: false,
+          message: `${field} must be a string.`,
+        });
+      }
+    }
+
+    if (
+      (firstName !== undefined && !firstName.trim()) ||
+      (lastName !== undefined && !lastName.trim())
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "First name and last name cannot be empty.",
+      });
+    }
     let cloudResponse;
     if (file) {
       const fileUri = getDataUri(file);
@@ -171,14 +243,14 @@ export const updateProfile = async (req, res) => {
       });
     }
     // updating data
-    if (firstName) user.firstName = firstName;
-    if (lastName) user.lastName = lastName;
-    if (occupation) user.occupation = occupation;
-    if (instagram) user.instagram = instagram;
-    if (facebook) user.facebook = facebook;
-    if (linkedin) user.linkedin = linkedin;
-    if (github) user.github = github;
-    if (bio) user.bio = bio;
+    if (firstName !== undefined) user.firstName = firstName.trim();
+    if (lastName !== undefined) user.lastName = lastName.trim();
+    if (occupation !== undefined) user.occupation = occupation.trim();
+    if (typeof instagram === "string") user.instagram = instagram.trim();
+    if (typeof facebook === "string") user.facebook = facebook.trim();
+    if (typeof linkedin === "string") user.linkedin = linkedin.trim();
+    if (typeof github === "string") user.github = github.trim();
+    if (bio !== undefined) user.bio = bio;
     if (file) user.photoUrl = cloudResponse.secure_url;
 
     await user.save();

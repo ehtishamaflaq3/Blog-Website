@@ -36,7 +36,7 @@ const Home = () => {
     const controller = new AbortController();
 
     axios
-      .get("http://localhost:3000/api/v1/blog/all-blogs", {
+      .get("/blog/all-blogs", {
         timeout: 15000,
         signal: controller.signal,
       })

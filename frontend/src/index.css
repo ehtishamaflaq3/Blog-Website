@@ -132,3 +132,30 @@
   background-color: #000000;
   color: rgba(26, 25, 25, 0.086);
 }
+
+.blog-article-content {
+  color: var(--foreground);
+  overflow-wrap: anywhere;
+}
+
+.blog-article-content img,
+.blog-article-content video,
+.blog-article-content iframe {
+  max-width: 100%;
+}
+
+.blog-article-content img,
+.blog-article-content video {
+  height: auto;
+}
+
+.blog-article-content pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.blog-article-content table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}

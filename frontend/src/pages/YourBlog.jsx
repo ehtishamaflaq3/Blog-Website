@@ -27,7 +27,6 @@ import {
   MoreVertical,
   Plus,
   Search,
-  Sparkles,
   Trash2,
 } from "lucide-react";
 
@@ -46,7 +45,7 @@ const YourBlog = () => {
     setDeletingId(id);
     try {
       const res = await axios.delete(
-        `http://localhost:3000/api/v1/blog/delete/${id}`,
+        `/blog/delete/${id}`,
         { withCredentials: true, timeout: 15000 }
       );
       if (res.data.success) {
@@ -72,7 +71,7 @@ const YourBlog = () => {
   useEffect(() => {
     const controller = new AbortController();
     axios
-      .get("http://localhost:3000/api/v1/blog/your-blog", {
+      .get("/blog/your-blog", {
         withCredentials: true,
         timeout: 15000,
         signal: controller.signal,
@@ -123,7 +122,7 @@ const YourBlog = () => {
   }, [blogs, searchTerm]);
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-6xl">
+    <div className="w-full min-w-0 max-w-6xl space-y-6 p-4 sm:p-6 lg:p-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -165,18 +164,25 @@ const YourBlog = () => {
 
       {/* Main Table Card */}
       <Card className="border border-border/80 shadow-xs overflow-hidden bg-card">
-        <div className="overflow-x-auto">
-          <Table className="w-full ">
-            <TableHeader className="bg-muted/40">
-              <TableRow>
-                <TableHead className="w-[45%]">Article</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
+        <Table className="w-full table-fixed">
+          <TableHeader className="bg-muted/40">
+            <TableRow>
+              <TableHead className="w-[calc(100%-5rem)] whitespace-normal sm:w-[48%]">
+                Article
+              </TableHead>
+              <TableHead className="hidden w-[20%] whitespace-normal sm:table-cell">
+                Category
+              </TableHead>
+              <TableHead className="hidden w-[18%] whitespace-normal sm:table-cell">
+                Date
+              </TableHead>
+              <TableHead className="w-20 whitespace-normal text-right sm:w-[14%]">
+                Actions
+              </TableHead>
+            </TableRow>
+          </TableHeader>
 
-            <TableBody>
+          <TableBody>
               {loading && (
                 <TableRow>
                   <TableCell colSpan={4} className="h-32 text-center text-sm text-muted-foreground">
@@ -223,7 +229,7 @@ const YourBlog = () => {
                 filtered.map((item) => (
                   <TableRow key={item._id} className="hover:bg-muted/30 transition-colors">
                     {/* Article Column */}
-                    <TableCell>
+                    <TableCell className="overflow-hidden whitespace-normal">
                       <div className="flex items-center gap-3">
                         {item.thumbnail ? (
                           <img
@@ -248,24 +254,31 @@ const YourBlog = () => {
                               {item.subTitle}
                             </p>
                           )}
+                          <p className="pt-1 text-[10px] text-muted-foreground sm:hidden">
+                            <span className="inline-block max-w-[8rem] truncate align-bottom">
+                              {item.category || "General"}
+                            </span>
+                            <span aria-hidden="true"> · </span>
+                            {formatDate(item.createdAt)}
+                          </p>
                         </div>
                       </div>
                     </TableCell>
 
                     {/* Category Column */}
-                    <TableCell>
-                      <span className="inline-block text-[11px] font-semibold text-primary px-2.5 py-0.5 rounded-full bg-primary/10">
+                    <TableCell className="hidden overflow-hidden sm:table-cell">
+                      <span className="inline-block max-w-full truncate rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-semibold text-primary">
                         {item.category || "General"}
                       </span>
                     </TableCell>
 
                     {/* Date Column */}
-                    <TableCell className="text-xs text-muted-foreground">
+                    <TableCell className="hidden whitespace-normal text-xs text-muted-foreground sm:table-cell">
                       {formatDate(item.createdAt)}
                     </TableCell>
 
                     {/* Actions Column */}
-                    <TableCell className="text-right">
+                    <TableCell className="overflow-hidden text-right">
                       <div className="flex items-center justify-end gap-1">
                         <Button
                           variant="ghost"
@@ -320,9 +333,8 @@ const YourBlog = () => {
                     </TableCell>
                   </TableRow>
                 ))}
-            </TableBody>
-          </Table>
-        </div>
+          </TableBody>
+        </Table>
       </Card>
     </div>
   );

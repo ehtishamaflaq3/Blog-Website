@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken'
 
 export const isAuthenticated=async(req, res,next)=>{
-    
     try {
         const authorization = req.headers.authorization;
         const bearerToken = authorization?.startsWith("Bearer ")
@@ -14,7 +13,10 @@ export const isAuthenticated=async(req, res,next)=>{
                 success:false,
             })
         }    
-        const decode= jwt.verify(token, process.env.Secret_Key)
+        const decode = jwt.verify(
+            token,
+            process.env.JWT_SECRET || process.env.Secret_Key
+        )
         if (!decode) {
             return res.status(401).json({
                 message:"Invalid token",

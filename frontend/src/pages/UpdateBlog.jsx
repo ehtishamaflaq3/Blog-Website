@@ -71,7 +71,7 @@ const UpdateBlog = () => {
     const loadBlog = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/v1/blog/${id}`,
+          `/blog/my/${id}`,
           { withCredentials: true, timeout: 15000 }
         );
         if (!isMounted) return;
@@ -140,7 +140,7 @@ const UpdateBlog = () => {
     try {
       dispatch(setLoading(true));
       const res = await axios.put(
-        `http://localhost:3000/api/v1/blog/${id}`,
+        `/blog/${id}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -272,6 +272,7 @@ const UpdateBlog = () => {
                 type="text"
                 name="title"
                 value={blogData.title}
+                maxLength={100}
                 onChange={handleChange}
                 placeholder="Story headline..."
                 className="w-full text-lg sm:text-xl font-bold h-12 px-3 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/40"
@@ -287,6 +288,7 @@ const UpdateBlog = () => {
                 type="text"
                 name="subtitle"
                 value={blogData.subtitle}
+                maxLength={180}
                 onChange={handleChange}
                 placeholder="Story summary or dek..."
                 className="w-full text-sm h-10 px-3 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/40 text-muted-foreground"

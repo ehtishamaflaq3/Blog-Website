@@ -78,7 +78,6 @@ const Sidebar = () => {
                     >
                       <Icon className="size-4" />
                     </div>
-
                     <div className="flex-1 hidden md:block text-left">
                       <p className="truncate leading-none">{item.label}</p>
                       <p

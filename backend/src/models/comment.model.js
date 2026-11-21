@@ -8,17 +8,15 @@ const commentSchema = new mongoose.Schema(
     },
     authorId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "user",
       required: true,
     },
     blogId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Blog",
+      required: true,
     },
-    likes: {
-      type: Array,
-      default: [],
-    },
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
     numberOfLikes: {
       type: Number,
       default: 0,

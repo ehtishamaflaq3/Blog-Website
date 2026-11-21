@@ -53,7 +53,7 @@ const CreateBlog = () => {
     try {
       dispatch(setLoading(true));
       const res = await axios.post(
-        "http://localhost:3000/api/v1/blog/create-blog",
+        "/blog/create-blog",
         { title: title.trim(), category, subTitle: subTitle.trim() },
         {
           headers: { "Content-Type": "application/json" },
