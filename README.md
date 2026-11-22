@@ -5,9 +5,6 @@ This repository contains two separate apps:
 - `frontend/` — React + Vite website
 - `backend/` — Express API and MongoDB connection
 
-## Run locally (Windows)
-
-Open two terminals in this project folder.
 
 ### 1. Start the backend
 
