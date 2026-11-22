@@ -73,6 +73,3 @@ variables. Every `VITE_` variable is included in the public browser bundle.
 
 Previously committed secrets can remain in older Git commits even after the
 files are ignored or removed from the latest version. Rotate them first.
-Removing those old copies requires rewriting Git history and coordinating a
-force-push; do not force-push while you have uncommitted changes or before
-rotating the credentials.
