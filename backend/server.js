@@ -1,4 +1,3 @@
-
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -10,6 +9,8 @@ import blogRouter from "./src/routes/blog.route.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import commentRouter from "./src/routes/comment.route.js";
+import express from "express";
+const app = express();
 
 const backendDirectory = path.dirname(fileURLToPath(import.meta.url));
 
