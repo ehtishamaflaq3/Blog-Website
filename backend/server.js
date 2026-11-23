@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
-import app from "./src/app.js";
+import app from "./src/application.js";
 import connectDb from "./src/db/db.js";
 import userRouter from "./src/routes/user.route.js";
 import blogRouter from "./src/routes/blog.route.js";
