@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "main": "server.js",
-  "scripts": {
-    "dev": "nodemon backend/server.js",
-    "build":"npm install && npm install --prefix frontend && npm run build --prefix frontend",
-    "start": "node backend/server.js"
-  },
+  
+"scripts": {
+  "dev": "nodemon server.js",
+  "start": "node server.js"
+},
   "type": "module",
   "dependencies": {
     "bcryptjs": "^3.0.3",
