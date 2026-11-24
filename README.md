@@ -59,12 +59,6 @@
   </a>
 </p>
 
-<p align="center">
-  <a href="https://blog-website-ehtishamaflaq3.vercel.app/">
-    🚀 <strong>EXPLORE DEVPULSE — LIVE DEMO</strong> ↗
-  </a>
-</p>
-
 ---
 
 ## Screenshots
