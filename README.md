@@ -1,16 +1,11 @@
 # DevPulse — Full-Stack MERN Blogging Platform
-
 <p align="center">
   <strong>Share Ideas. Explore Stories. Connect Through Technology.</strong>
 </p>
 
 ## About The Project
 
-**DevPulse** is a full-stack blogging platform built using the MERN stack. It provides a space where users can create and explore blog posts, interact with content, and share their ideas.
-
-This project was developed to gain practical experience in full-stack web development, REST APIs, authentication, database integration, and deployment.
-
-**Live Website:** [https://blog-website-ehtishamaflaq3.vercel.app/](https://blog-website-ehtishamaflaq3.vercel.app/)
+**DevPulse** is a full-stack blogging platform built using the MERN stack. It provides a space where users can create and explore blog posts, interact with content, and share their ideas.This project was developed to gain practical experience in full-stack web development, REST APIs, authentication, database integration, and deployment.
 
 ---
 
@@ -63,23 +58,7 @@ This project was developed to gain practical experience in full-stack web develo
 
 ## Screenshots
 
-### Homepage
-<!-- Add your homepage screenshot here -->
-<p align="center">
-  <img src="screenshots/homepage.png" width="100%" alt="DevPulse Homepage" />
-</p>
-
-### Authentication
-<!-- Add your login/signup screenshot here -->
-<p align="center">
-  <img src="screenshots/authentication.png" width="100%" alt="DevPulse Authentication" />
-</p>
-
-### Blog Details
-<!-- Add your blog details screenshot here -->
-<p align="center">
-  <img src="screenshots/blog-details.png" width="100%" alt="DevPulse Blog Details" />
-</p>
+<img width="1917" height="855" alt="image" src="https://github.com/user-attachments/assets/730733c0-8e73-4dc9-aba6-2f067e67f760" />
 
 ---
 
@@ -131,12 +110,7 @@ Building DevPulse helped me gain practical experience in:
 - Debugging real-world development and deployment issues.
 
 ---
-
-## Developer
-
-**Ehtisham Aflaq**
-
-Software Engineering Student | MERN Stack Developer
+**Ehtisham Aflaq** Software Engineering Student | MERN Stack Developer
 
 - LinkedIn: [Ehtisham Aflaq](https://www.linkedin.com/in/ehtishamaflaq/)
 
