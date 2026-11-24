@@ -101,7 +101,7 @@ Blog-Website/
 
 <p align="center">
   <a href="https://blog-website-ehtishamaflaq3.vercel.app/">
-    <img src="https://img.shields.io/badge/Live%20Project-View%20Now-ff3d00?style=for-the-badge&logo=google-chrome&logoColor=white"/>
+    <img src="https://img.shields.io/badge/_Explore_DevPulse-Live_Demo-7C3AED?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" />
   </a>
 </p>
 
