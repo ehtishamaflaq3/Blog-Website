@@ -59,6 +59,12 @@
   </a>
 </p>
 
+<p align="center">
+  <a href="https://blog-website-ehtishamaflaq3.vercel.app/">
+    🚀 <strong>EXPLORE DEVPULSE — LIVE DEMO</strong> ↗
+  </a>
+</p>
+
 ---
 
 ## Screenshots
@@ -69,7 +75,6 @@
 <img width="1895" height="868" alt="image" src="https://github.com/user-attachments/assets/d5e14ce6-2d92-44db-8ba2-e7a09f02a284" />
 <img width="1911" height="872" alt="image" src="https://github.com/user-attachments/assets/d9772d29-01b7-4eef-924e-0e000c864c3e" />
 <img width="1917" height="858" alt="image" src="https://github.com/user-attachments/assets/b007c180-4897-42ba-8029-5067b9f1c420" />
-<img width="1886" height="873" alt="image" src="https://github.com/user-attachments/assets/5d09644f-51cd-46c7-87c8-445950cb90fd" />
 <img width="1917" height="855" alt="image" src="https://github.com/user-attachments/assets/8797e823-65c5-474d-8120-7da379710d13" />
 <img width="1907" height="838" alt="image" src="https://github.com/user-attachments/assets/c353752e-8137-49fd-b022-5775d895356a" />
 <img width="1888" height="842" alt="image" src="https://github.com/user-attachments/assets/5759f5d6-b7e2-4e55-bae7-f933c9e221a4" />
