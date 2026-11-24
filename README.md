@@ -1,9 +1,5 @@
 # DevPulse — Full-Stack MERN Blogging Platform
 
-<p align="center">
-  <strong>Share Ideas. Explore Stories. Connect Through Technology.</strong>
-</p>
-
 **DevPulse** is a full-stack blogging platform built using the MERN stack. It provides a space where users can create and explore blog posts, interact with content, and share their ideas.This project was developed to gain practical experience in full-stack web development, REST APIs, authentication, database integration, and deployment.
 
 ---
@@ -24,7 +20,6 @@
 ---
 
 ## Tech Stack
-
 ### Frontend
 - React.js
 - Vite
@@ -116,5 +111,5 @@ Building DevPulse helped me gain practical experience in:
 ---
 
 <p align="center">
-  <strong>Built with ❤️ and a lot of learning.</strong>
+  <strong>Built with ❤️ and a lot of learning.Share Ideas. Explore Stories. Connect Through Technology.</strong>
 </p>
