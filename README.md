@@ -98,7 +98,14 @@ Blog-Website/
 
 ---
 
-**Live Project:** [Visit DevPulse](https://blog-website-ehtishamaflaq3.vercel.app/)
+**Live Project:**
+
+<p align="center">
+  <a href="https://blog-website-ehtishamaflaq3.vercel.app/">
+    <img src="https://img.shields.io/badge/Live%20Project-View%20Now-ff3d00?style=for-the-badge&logo=google-chrome&logoColor=white"/>
+  </a>
+</p>
+
 ---
 
 ## Learning Outcomes
