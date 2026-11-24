@@ -50,6 +50,17 @@
 
 ---
 
+
+**Live Project:**
+
+<p align="center">
+  <a href="https://blog-website-ehtishamaflaq3.vercel.app/">
+    <img src="https://img.shields.io/badge/_Explore_DevPulse-Live_Demo-7C3AED?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" />
+  </a>
+</p>
+
+---
+
 ## Screenshots
 
 <img width="1917" height="857" alt="image" src="https://github.com/user-attachments/assets/eede5b7a-3a44-4f18-957c-54fd7529a751" />
@@ -94,16 +105,6 @@ Blog-Website/
 │
 └── README.md
 ```
-
----
-
-**Live Project:**
-
-<p align="center">
-  <a href="https://blog-website-ehtishamaflaq3.vercel.app/">
-    <img src="https://img.shields.io/badge/_Explore_DevPulse-Live_Demo-7C3AED?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" />
-  </a>
-</p>
 
 ---
 
