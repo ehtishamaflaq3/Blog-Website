@@ -1,75 +1,243 @@
-# DevPulse Blog Website
+# DevPulse — Full-Stack MERN Blogging Platform
 
-This repository contains two separate apps:
+<p align="center">
+  <strong>Share Ideas. Explore Stories. Connect Through Technology.</strong>
+</p>
 
-- `frontend/` — React + Vite website
-- `backend/` — Express API and MongoDB connection
+<p align="center">
+  <a href="https://blog-website-ehtishamaflaq3.vercel.app/">
+    <img src="https://img.shields.io/badge/🌐_LIVE_DEMO-Visit_DevPulse-6366f1?style=for-the-badge" alt="Live Demo" />
+  </a>
+</p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/React-Frontend-61DAFB?style=flat-square&logo=react&logoColor=black" />
+  <img src="https://img.shields.io/badge/Node.js-Backend-339933?style=flat-square&logo=nodedotjs&logoColor=white" />
+  <img src="https://img.shields.io/badge/Express.js-Framework-000000?style=flat-square&logo=express&logoColor=white" />
+  <img src="https://img.shields.io/badge/MongoDB-Database-47A248?style=flat-square&logo=mongodb&logoColor=white" />
+  <img src="https://img.shields.io/badge/Vercel-Deployed-black?style=flat-square&logo=vercel" />
+</p>
 
-### 1. Start the backend
+---
 
-```powershell
-cd backend
-Copy-Item .env.example .env
-npm install
-npm run dev
+## About The Project
+
+**DevPulse** is a full-stack blogging platform built using the MERN stack. It provides a space where users can create and explore blog posts, interact with content, and share their ideas.
+
+This project was developed to gain practical experience in full-stack web development, REST APIs, authentication, database integration, and deployment.
+
+**Live Website:** [https://blog-website-ehtishamaflaq3.vercel.app/](https://blog-website-ehtishamaflaq3.vercel.app/)
+
+---
+
+## Features
+
+-  User Registration and Login
+-  Create and Explore Blog Posts
+-  Like and Interact with Blogs
+-  Comment System
+-  User Authentication
+-  Dark and Light Theme
+-  Blog Search Interface
+-  Responsive User Interface
+-  Cloud-Based Media Management
+-  Live Frontend and Backend Deployment
+
+---
+
+## Tech Stack
+
+### Frontend
+- React.js
+- Vite
+- Tailwind CSS
+- Redux Toolkit
+- Axios
+- React Router
+- React Icons
+
+### Backend
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JSON Web Tokens (JWT)
+- bcryptjs
+- Multer
+- Cloudinary
+
+### Tools & Deployment
+- Git & GitHub
+- Postman
+- Vercel
+- MongoDB Atlas
+
+---
+
+## Screenshots
+
+### Homepage
+<!-- Add your homepage screenshot here -->
+<p align="center">
+  <img src="screenshots/homepage.png" width="100%" alt="DevPulse Homepage" />
+</p>
+
+### Authentication
+<!-- Add your login/signup screenshot here -->
+<p align="center">
+  <img src="screenshots/authentication.png" width="100%" alt="DevPulse Authentication" />
+</p>
+
+### Blog Details
+<!-- Add your blog details screenshot here -->
+<p align="center">
+  <img src="screenshots/blog-details.png" width="100%" alt="DevPulse Blog Details" />
+</p>
+
+---
+
+## Project Structure
+
+```text
+Blog-Website/
+│
+├── backend/
+│   ├── api/
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── db/
+│   │   ├── middleware/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   └── utils/
+│   ├── server.js
+│   ├── package.json
+│   └── vercel.json
+│
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   └── ...
+│   └── package.json
+│
+└── README.md
 ```
 
-Edit `backend/.env` and add your MongoDB connection string, a new JWT secret,
-and Cloudinary credentials. Keep this file private.
+---
 
-### 2. Start the frontend
+## Getting Started
 
-In the second terminal:
+Follow these steps to run DevPulse locally.
 
-```powershell
-cd frontend
-Copy-Item .env.example .env
-npm install
-npm run dev
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/ehtishamaflaq3/Blog-Website.git
 ```
 
-Open the local URL printed by Vite. Add the public feedback email to
-`frontend/.env` as `VITE_FEEDBACK_EMAIL`.
+### 2. Navigate to the Project
 
-## Environment variables
+```bash
+cd Blog-Website
+```
 
-Backend variables belong in `backend/.env` locally and in your backend host's
-Environment Variables settings when deployed:
+### 3. Install Backend Dependencies
 
-| Variable | Purpose |
-| --- | --- |
-| `PORT` | API port; the hosting service may provide this automatically |
-| `CLIENT_URL` | Exact public URL of the frontend |
-| `MONGODB_URI` | MongoDB Atlas connection string |
-| `JWT_SECRET` | Long, random secret used to sign login tokens |
-| `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name |
-| `CLOUDINARY_API_KEY` | Cloudinary API key |
-| `CLOUDINARY_API_SECRET` | Cloudinary API secret |
+```bash
+npm install --prefix backend
+```
 
-Frontend variables belong in `frontend/.env` locally and in your frontend
-host's environment settings at build time:
+### 4. Install Frontend Dependencies
 
-| Variable | Purpose |
-| --- | --- |
-| `VITE_API_URL` | Backend URL ending in `/api/v1` |
-| `VITE_FEEDBACK_EMAIL` | Address that receives footer feedback |
+```bash
+npm install --prefix frontend
+```
 
-Never put database passwords, JWT secrets, or Cloudinary secrets in frontend
-variables. Every `VITE_` variable is included in the public browser bundle.
+### 5. Configure Environment Variables
 
-## GitHub and deployment checklist
+Create a `.env` file inside the `backend` directory:
 
-1. Rotate any MongoDB/Atlas and Cloudinary credentials that were ever committed.
-   Generate a new `JWT_SECRET` too. Do not send secret values in chat or commit
-   them to GitHub.
-2. Set each deployment variable in the matching host dashboard. Deploy the API
-   from `backend/`; build and publish the Vite app from `frontend/` (`npm run
-   build`, output folder `dist`).
-3. Set `CLIENT_URL` to the deployed frontend URL and `VITE_API_URL` to the
-   deployed backend URL followed by `/api/v1`.
-4. Test signup, login, image upload, blog loading, and logout on the deployed
-   site before sharing it.
+```env
+Mongodb_Url=your_mongodb_connection_string
+Secret_Key=your_jwt_secret
 
-Previously committed secrets can remain in older Git commits even after the
-files are ignored or removed from the latest version. Rotate them first.
+Cloud_Name=your_cloudinary_cloud_name
+Api_Key=your_cloudinary_api_key
+Api_Secret=your_cloudinary_api_secret
+
+CLIENT_URL=http://localhost:5173
+```
+
+Create a `.env` file inside the `frontend` directory:
+
+```env
+VITE_API_URL=http://localhost:3000/api/v1
+```
+
+**Important:** Replace the example values with your own credentials. Never upload `.env` files or expose private API keys on GitHub.
+
+### 6. Run the Application
+
+Start the backend:
+
+```bash
+npm run dev --prefix backend
+```
+
+Start the frontend in another terminal:
+
+```bash
+npm run dev --prefix frontend
+```
+
+Open the local frontend URL shown by Vite in your browser.
+
+---
+
+## Deployment
+
+DevPulse is deployed using Vercel and MongoDB Atlas.
+
+| Service | Platform |
+|---|---|
+| Frontend | Vercel |
+| Backend | Vercel |
+| Database | MongoDB Atlas |
+
+**Live Project:** [Visit DevPulse](https://blog-website-ehtishamaflaq3.vercel.app/)
+
+---
+
+## Learning Outcomes
+
+Building DevPulse helped me gain practical experience in:
+
+- Developing a full-stack application using the MERN stack.
+- Connecting React frontend with Express REST APIs.
+- Working with MongoDB and Mongoose.
+- Implementing user authentication and authorization.
+- Managing application state with Redux.
+- Handling API requests using Axios.
+- Working with environment variables and deployment.
+- Debugging real-world development and deployment issues.
+
+---
+
+## Developer
+
+**Ehtisham Aflaq**
+
+Software Engineering Student | MERN Stack Developer
+
+- LinkedIn: [Ehtisham Aflaq](https://www.linkedin.com/in/ehtishamaflaq/)
+
+---
+
+<p align="center">
+  <strong>Built with ❤️ and a lot of learning.</strong>
+</p>
+<p align="center">
+  ⭐ If you like this project, consider giving it a star!
+</p>
