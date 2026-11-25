@@ -6,7 +6,7 @@
 
 ## Features
 
--  User Registration and Login
+-  User Registration and Login.
 -  Create and Explore Blog Posts
 -  Like and Interact with Blogs
 -  Comment System
