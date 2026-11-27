@@ -17,7 +17,6 @@
 -  Cloud-Based Media Management
 -  Live Frontend and Backend Deployment
 
----
 
 ## Tech Stack
 ### Frontend
